@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AURUM GRAND — Luxury Hotel Collection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,700&family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════════════ */
+:root{
+  --bg:        #0a0908;
+  --bg2:       #111009;
+  --surface:   #161410;
+  --surface2:  #1e1b14;
+  --border:    rgba(196,155,65,.14);
+  --border2:   rgba(196,155,65,.08);
+  --gold:      #c49b41;
+  --gold2:     #e8c97a;
+  --gold3:     #f5e4b5;
+  --ivory:     #f8f3ea;
+  --cream:     #f0e9d8;
+  --warm:      #d4c5a0;
+  --muted:     #7a7060;
+  --muted2:    #504840;
+  --white:     #ffffff;
+  --green:     #2a4030;
+  --red:       #8b2020;
+  --font-display:'Cormorant',serif;
+  --font-ui:'Outfit',sans-serif;
+  --font-accent:'Playfair Display',serif;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --ease2:cubic-bezier(.25,.46,.45,.94);
+  --r4:4px; --r8:8px; --r12:12px; --r16:16px; --r24:24px; --r32:32px;
+  --sh:0 2px 20px rgba(0,0,0,.4);
+  --sh2:0 8px 40px rgba(0,0,0,.5);
+  --sh3:0 20px 80px rgba(0,0,0,.6);
+  --shg:0 10px 40px rgba(196,155,65,.2);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font-ui);background:var(--bg);color:var(--ivory);overflow-x:hidden;min-height:100vh;cursor:none}
+a{text-decoration:none;color:inherit}
+button,input,select,textarea{font-family:var(--font-ui)}
+ul{list-style:none}
+img{display:block;max-width:100%}
+ 
+/* ═══════════════════════════════════════════════════
+   CURSOR
+═══════════════════════════════════════════════════ */
+#CUR{position:fixed;width:8px;height:8px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:99999;transform:translate(-50%,-50%);transition:width .25s,height .25s,opacity .25s;mix-blend-mode:screen}
+#CURR{position:fixed;width:36px;height:36px;border:1px solid var(--gold);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .25s,height .25s,opacity .25s;opacity:.4}
+#CUR.big{width:4px;height:4px}
+#CURR.big{width:56px;height:56px;opacity:.15}
+ 
+/* ═══════════════════════════════════════════════════
+   SCROLL PROGRESS
+═══════════════════════════════════════════════════ */
+#PROG{position:fixed;top:0;left:0;height:1.5px;background:linear-gradient(90deg,var(--gold),var(--gold2));z-index:9999;width:0;transition:width .08s}
+ 
+/* ═══════════════════════════════════════════════════
+   GRAIN
+═══════════════════════════════════════════════════ */
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9990;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+  opacity:.45}
+ 
+/* ═══════════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════════ */
+nav{position:fixed;top:0;left:0;right:0;z-index:800;padding:28px 64px;display:flex;align-items:center;justify-content:space-between;transition:all .4s var(--ease)}
+nav.solid{background:rgba(10,9,8,.95);backdrop-filter:blur(24px);padding:18px 64px;border-bottom:1px solid var(--border2)}
+.nav-logo{font-family:var(--font-display);font-size:22px;font-weight:600;letter-spacing:6px;text-transform:uppercase;color:var(--ivory);cursor:pointer}
+.nav-logo span{color:var(--gold)}
+.nav-links{display:flex;align-items:center;gap:34px}
+.nav-links a{font-size:11px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);transition:color .3s;position:relative;padding-bottom:4px}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--gold);transition:width .3s}
+.nav-links a:hover,.nav-links a.active{color:var(--gold2)}
+.nav-links a:hover::after,.nav-links a.active::after{width:100%}
+.nav-book{background:transparent;border:1px solid var(--gold);color:var(--gold)!important;padding:10px 24px;font-size:10px!important;letter-spacing:3px!important;transition:all .3s!important}
+.nav-book:hover{background:var(--gold)!important;color:var(--bg)!important}
+.nav-book::after{display:none!important}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.nav-hamburger span{display:block;width:22px;height:1px;background:var(--ivory);transition:all .3s}
+.nav-hamburger.open span:nth-child(1){transform:rotate(45deg) translate(4px,4px)}
+.nav-hamburger.open span:nth-child(2){opacity:0}
+.nav-hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px)}
+ 
+/* Mobile nav */
+.mob-nav{position:fixed;top:0;right:-100%;width:min(360px,100vw);height:100vh;background:var(--surface);z-index:790;transition:right .4s var(--ease);padding:100px 48px 48px;display:flex;flex-direction:column;gap:8px;border-left:1px solid var(--border)}
+.mob-nav.open{right:0}
+.mob-nav a{font-family:var(--font-display);font-size:32px;font-weight:300;color:var(--ivory);padding:10px 0;border-bottom:1px solid var(--border2);transition:color .25s}
+.mob-nav a:hover{color:var(--gold)}
+.mob-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:780;opacity:0;pointer-events:none;transition:opacity .4s;backdrop-filter:blur(4px)}
+.mob-overlay.open{opacity:1;pointer-events:all}
+ 
+/* ═══════════════════════════════════════════════════
+   PAGE SYSTEM
+═══════════════════════════════════════════════════ */
+.page{display:none;min-height:100vh;animation:pIn .5s var(--ease) forwards}
+.page.active{display:block}
+@keyframes pIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+ 
+/* ═══════════════════════════════════════════════════
+   SHARED / UTILITIES
+═══════════════════════════════════════════════════ */
+.section{padding:110px 64px}
+.s-eyebrow{font-size:10px;font-weight:500;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.s-title{font-family:var(--font-display);font-size:clamp(38px,5vw,72px);font-weight:300;line-height:1.05;color:var(--ivory)}
+.s-title em{font-style:italic;color:var(--gold2)}
+.s-title strong{font-weight:700}
+.s-sub{font-family:var(--font-display);font-size:20px;font-weight:300;font-style:italic;color:var(--muted);line-height:1.7;margin-top:16px;max-width:560px}
+.line{width:40px;height:1px;background:var(--gold);margin:20px 0}
+.line.c{margin:20px auto}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 32px;font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;transition:all .35s var(--ease);position:relative;overflow:hidden}
+.btn::before{content:'';position:absolute;inset:0;transform:translateX(-101%);transition:transform .4s var(--ease)}
+.btn span{position:relative;z-index:1;transition:color .35s}
+.btn-gold{background:var(--gold);color:var(--bg)}
+.btn-gold::before{background:var(--ivory)}
+.btn-gold:hover span{color:var(--bg)}
+.btn-gold:hover::before{transform:translateX(0)}
+.btn-outline{background:transparent;color:var(--ivory);border:1px solid rgba(255,255,255,.2)}
+.btn-outline::before{background:var(--gold)}
+.btn-outline:hover::before{transform:translateX(0)}
+.btn-outline:hover span{color:var(--bg)}
+.btn-dark{background:var(--surface2);color:var(--ivory);border:1px solid var(--border)}
+.btn-dark::before{background:var(--gold)}
+.btn-dark:hover::before{transform:translateX(0)}
+.btn-dark:hover span{color:var(--bg)}
+.tag{display:inline-block;font-size:8px;font-weight:600;letter-spacing:3px;text-transform:uppercase;padding:5px 12px;border:1px solid var(--gold);color:var(--gold)}
+.tag.filled{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.tag.dark{background:var(--surface2);color:var(--warm);border-color:var(--border)}
+ 
+/* Reveal animations */
+.rv{opacity:0;transform:translateY(32px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.rv.in{opacity:1;transform:translateY(0)}
+.rv-l{opacity:0;transform:translateX(-32px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.rv-l.in{opacity:1;transform:translateX(0)}
+.rv-r{opacity:0;transform:translateX(32px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.rv-r.in{opacity:1;transform:translateX(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}.d5{transition-delay:.5s}
+ 
+/* Gold divider ornament */
+.ornament{text-align:center;color:var(--gold);opacity:.4;font-size:18px;letter-spacing:12px;margin:16px 0}
+ 
+/* ═══════════════════════════════════════════════════
+   PAGE 1 — HOME
+═══════════════════════════════════════════════════ */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;position:relative;overflow:hidden}
+.hero-l{background:var(--bg);display:flex;flex-direction:column;justify-content:center;padding:160px 72px 100px;position:relative;z-index:2}
+.hero-l::before{content:'';position:absolute;top:-200px;left:-200px;width:800px;height:800px;background:radial-gradient(circle,rgba(196,155,65,.06) 0%,transparent 65%);pointer-events:none}
+.hero-label{font-size:9px;font-weight:500;letter-spacing:6px;text-transform:uppercase;color:var(--gold);margin-bottom:32px;opacity:0;animation:slideUp .9s .2s var(--ease) forwards}
+.hero-h1{font-family:var(--font-display);font-size:clamp(56px,7vw,104px);font-weight:300;line-height:.96;color:var(--ivory);margin-bottom:8px;opacity:0;animation:slideUp .9s .4s var(--ease) forwards}
+.hero-h1 em{font-style:italic;font-weight:300;color:var(--gold2);display:block}
+.hero-h1 strong{font-weight:700;display:block}
+.hero-desc{font-family:var(--font-display);font-size:18px;font-weight:300;font-style:italic;color:var(--muted);line-height:1.7;max-width:380px;margin:28px 0 44px;opacity:0;animation:slideUp .9s .6s var(--ease) forwards}
+.hero-actions{display:flex;gap:14px;opacity:0;animation:slideUp .9s .8s var(--ease) forwards}
+.hero-scroll{position:absolute;bottom:48px;left:72px;display:flex;align-items:center;gap:16px;opacity:0;animation:slideUp .9s 1.1s var(--ease) forwards}
+.hero-scroll-line{width:48px;height:1px;background:var(--gold);position:relative;overflow:hidden}
+.hero-scroll-line::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,var(--gold2),transparent);animation:shimmer 2.2s linear infinite}
+.hero-scroll-t{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+.hero-r{position:relative;overflow:hidden}
+.hero-r img{width:100%;height:100%;object-fit:cover;animation:heroZoom 12s ease forwards;filter:brightness(.7) saturate(.85)}
+.hero-r-overlay{position:absolute;inset:0;background:linear-gradient(105deg,rgba(10,9,8,.5) 0%,transparent 50%)}
+.hero-badge{position:absolute;bottom:56px;right:56px;width:116px;height:116px;border:1px solid var(--gold);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;animation:rotateSlow 20s linear infinite;box-shadow:var(--shg)}
+.hero-badge::before{content:'';position:absolute;inset:6px;border:1px solid rgba(196,155,65,.3);border-radius:50%}
+.hero-badge-t{font-family:var(--font-display);font-size:14px;font-weight:600;color:var(--gold2);line-height:1.3;position:relative}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:60px;padding-top:40px;border-top:1px solid var(--border2);opacity:0;animation:slideUp .9s 1s var(--ease) forwards}
+.hstat{text-align:center;padding:0 20px;border-right:1px solid var(--border2)}
+.hstat:last-child{border-right:none}
+.hstat-n{font-family:var(--font-display);font-size:42px;font-weight:600;color:var(--gold);line-height:1}
+.hstat-l{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-top:6px}
+ 
+/* Search */
+.search-wrap{background:var(--surface);border:1px solid var(--border);margin:0 64px;margin-top:-44px;position:relative;z-index:10;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr auto;opacity:0;animation:slideUp .9s 1.2s var(--ease) forwards}
+.sf{padding:20px 24px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:6px;cursor:pointer;transition:background .2s}
+.sf:hover{background:var(--surface2)}
+.sf label{font-size:9px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);pointer-events:none}
+.sf input,.sf select{background:transparent;border:none;outline:none;font-family:var(--font-ui);font-size:14px;font-weight:400;color:var(--ivory);cursor:pointer;width:100%}
+.sf select option{background:var(--surface2);color:var(--ivory)}
+.s-go{background:var(--gold);border:none;padding:0 40px;font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--bg);cursor:pointer;transition:all .3s}
+.s-go:hover{background:var(--gold2)}
+ 
+/* Home sections */
+.home-feature{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:600px}
+.hf-img{position:relative;overflow:hidden}
+.hf-img img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease);filter:brightness(.75)}
+.hf-img:hover img{transform:scale(1.04)}
+.hf-img-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(10,9,8,.4) 0%,transparent 55%)}
+.hf-content{background:var(--surface);padding:80px 72px;display:flex;flex-direction:column;justify-content:center}
+.hf-content.dark{background:var(--bg)}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-top:60px}
+.why-card{background:var(--surface);padding:48px 36px;transition:background .3s;position:relative;overflow:hidden}
+.why-card::before{content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+.why-card:hover{background:var(--surface2)}
+.why-card:hover::before{transform:scaleX(1)}
+.why-ico{font-size:28px;margin-bottom:20px}
+.why-t{font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--ivory);margin-bottom:10px}
+.why-d{font-size:14px;color:var(--muted);line-height:1.7}
+/* Destinations */
+.dest-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:56px}
+.dest-card{aspect-ratio:3/4;border-radius:0;overflow:hidden;position:relative;cursor:pointer;group:true}
+.dest-card img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease);filter:brightness(.65)}
+.dest-card:hover img{transform:scale(1.1)}
+.dest-card-info{position:absolute;bottom:0;left:0;right:0;padding:24px 20px;background:linear-gradient(to top,rgba(0,0,0,.8) 0%,transparent 70%)}
+.dest-card-name{font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--ivory);margin-bottom:4px}
+.dest-card-props{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.dest-arrow{position:absolute;top:16px;right:16px;width:36px;height:36px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:14px;opacity:0;transform:translateY(-6px);transition:all .3s}
+.dest-card:hover .dest-arrow{opacity:1;transform:translateY(0)}
+/* Offer strip */
+.offer-strip{background:var(--green);padding:56px 64px;display:flex;align-items:center;justify-content:space-between;gap:40px;position:relative;overflow:hidden}
+.offer-strip::before{content:'28%';font-family:var(--font-display);font-size:280px;font-weight:700;color:rgba(255,255,255,.03);position:absolute;right:-20px;top:-60px;pointer-events:none;line-height:1}
+.offer-h{font-family:var(--font-display);font-size:clamp(24px,3vw,44px);font-weight:300;color:var(--ivory);line-height:1.15}
+.offer-h em{font-style:italic;color:var(--gold2)}
+.offer-sub{font-size:14px;color:rgba(240,233,216,.6);margin-top:10px;max-width:480px;line-height:1.6}
+.countdown{display:flex;gap:16px;flex-shrink:0}
+.cd-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);padding:20px 24px;text-align:center;min-width:76px}
+.cd-n{font-family:var(--font-display);font-size:36px;font-weight:600;color:var(--gold2);line-height:1}
+.cd-l{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-top:4px}
+/* Testimonials */
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:56px}
+.testi-card{background:var(--surface);border:1px solid var(--border);padding:36px;transition:all .35s}
+.testi-card:hover{border-color:rgba(196,155,65,.35);box-shadow:var(--shg);transform:translateY(-4px)}
+.testi-stars{color:var(--gold);font-size:12px;letter-spacing:3px;margin-bottom:18px}
+.testi-q{font-family:var(--font-display);font-size:17px;font-style:italic;font-weight:300;color:var(--warm);line-height:1.75;margin-bottom:24px}
+.testi-author{display:flex;align-items:center;gap:14px}
+.testi-av{width:44px;height:44px;border:1px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:18px;font-weight:600;color:var(--gold)}
+.testi-name{font-size:14px;font-weight:500;color:var(--ivory)}
+.testi-loc{font-size:11px;color:var(--muted)}
+ 
+/* ═══════════════════════════════════════════════════
+   PAGE 2 — ROOMS
+═══════════════════════════════════════════════════ */
+.page-hero{padding:160px 64px 80px;background:var(--bg2);position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1400&q=50') center/cover no-repeat;opacity:.08}
+.page-hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.rooms-filters{display:flex;align-items:center;gap:10px;padding:24px 64px;background:var(--surface);border-bottom:1px solid var(--border);flex-wrap:wrap}
+.filt{padding:8px 20px;border:1px solid var(--border);font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .25s;background:transparent}
+.filt:hover,.filt.on{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.filt-sort{margin-left:auto;font-size:12px;color:var(--muted)}
+.filt-sort select{background:transparent;border:1px solid var(--border);color:var(--ivory);padding:7px 14px;font-family:var(--font-ui);font-size:11px;outline:none;cursor:pointer}
+.filt-sort select option{background:var(--surface2)}
+.rooms-wrap{padding:60px 64px 100px;background:var(--bg)}
+.rooms-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.room-card{background:var(--surface);cursor:pointer;position:relative;overflow:hidden;transition:all .35s}
+.room-card:hover{background:var(--surface2)}
+.rc-img{height:260px;overflow:hidden;position:relative}
+.rc-img img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease);filter:brightness(.75)}
+.room-card:hover .rc-img img{transform:scale(1.06)}
+.rc-tag{position:absolute;top:18px;left:18px}
+.rc-wish{position:absolute;top:16px;right:16px;width:34px;height:34px;background:rgba(10,9,8,.6);border:1px solid rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;transition:all .25s}
+.rc-wish:hover{border-color:var(--gold);color:var(--gold)}
+.rc-wish.on{background:var(--red);border-color:var(--red);color:white}
+.rc-body{padding:28px}
+.rc-name{font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--ivory);margin-bottom:8px}
+.rc-feats{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.rc-feat{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px}
+.rc-foot{display:flex;align-items:center;justify-content:space-between;padding-top:18px;border-top:1px solid var(--border2)}
+.rc-price{font-family:var(--font-display);font-size:26px;font-weight:600;color:var(--gold)}
+.rc-price-s{font-size:11px;color:var(--muted)}
+.rc-rating{font-size:12px;color:var(--muted)}
+.rc-rating strong{color:var(--gold2);font-size:14px}
+.rc-btn{padding:10px 20px;background:transparent;border:1px solid var(--gold);color:var(--gold);font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .25s}
+.rc-btn:hover{background:var(--gold);color:var(--bg)}
+ 
+/* Room Detail */
+.rd-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);backdrop-filter:blur(12px);z-index:700;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .4s}
+.rd-overlay.open{opacity:1;pointer-events:all}
+.rd-box{background:var(--surface);max-width:1000px;width:100%;max-height:92vh;overflow-y:auto;position:relative;transform:scale(.93);transition:transform .4s var(--ease)}
+.rd-overlay.open .rd-box{transform:scale(1)}
+.rd-close{position:absolute;top:18px;right:18px;width:36px;height:36px;background:rgba(255,255,255,.08);border:1px solid var(--border);font-size:16px;color:var(--ivory);cursor:pointer;z-index:5;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.rd-close:hover{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.rd-imgs{display:grid;grid-template-columns:2fr 1fr;height:340px}
+.rd-imgs img{width:100%;height:100%;object-fit:cover}
+.rd-body{display:grid;grid-template-columns:1fr 320px;gap:40px;padding:40px}
+.rd-features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px}
+.rd-feat{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--surface2);font-size:13px;color:var(--warm)}
+.rd-feat-i{font-size:16px}
+.rd-book-box{background:var(--bg2);border:1px solid var(--border);padding:28px;position:sticky;top:20px}
+.rd-book-price{font-family:var(--font-display);font-size:40px;font-weight:600;color:var(--gold)}
+.rd-fields{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+.rd-field label{display:block;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.rd-field input,.rd-field select{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--ivory);padding:11px 14px;font-family:var(--font-ui);font-size:13px;outline:none;transition:border-color .25s}
+.rd-field input:focus,.rd-field select:focus{border-color:var(--gold)}
+ 
+/* ═══════════════════════════════════════════════════
+   PAGE 3 — BOOKING
+═══════════════════════════════════════════════════ */
+.bk-steps{display:flex;border-bottom:1px solid var(--border);background:var(--surface)}
+.bk-step{flex:1;padding:22px 20px;display:flex;align-items:center;gap:14px;border-right:1px solid var(--border);cursor:pointer;transition:background .25s;position:relative}
+.bk-step:last-child{border-right:none}
+.bk-step-n{width:32px;height:32px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--muted);flex-shrink:0;transition:all .3s}
+.bk-step.active .bk-step-n{background:var(--gold);border-color:var(--gold);color:var(--bg)}
+.bk-step.done .bk-step-n{background:var(--green);border-color:var(--green);color:white}
+.bk-step-info{}
+.bk-step-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.bk-step-name{font-size:13px;font-weight:500;color:var(--muted);margin-top:2px}
+.bk-step.active .bk-step-name{color:var(--ivory)}
+.bk-content{display:grid;grid-template-columns:1fr 380px;gap:0;min-height:600px}
+.bk-form-area{padding:56px 64px;background:var(--bg)}
+.bk-form-title{font-family:var(--font-display);font-size:28px;font-weight:600;color:var(--ivory);margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.fg{display:flex;flex-direction:column;gap:8px}
+.fg.full{grid-column:1/-1}
+.fg label{font-size:9px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold)}
+.fg input,.fg select,.fg textarea{background:var(--surface);border:1px solid var(--border);color:var(--ivory);padding:13px 16px;font-family:var(--font-ui);font-size:14px;outline:none;transition:border-color .25s,box-shadow .25s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--gold);box-shadow:0 0 0 2px rgba(196,155,65,.08)}
+.fg textarea{resize:vertical;min-height:90px;line-height:1.6}
+.fg select option{background:var(--surface2)}
+.bk-nav{display:flex;justify-content:space-between;align-items:center;margin-top:32px}
+.bk-sidebar{background:var(--surface);border-left:1px solid var(--border);padding:48px 36px;display:flex;flex-direction:column;gap:24px}
+.bk-sum{display:flex;flex-direction:column;gap:0}
+.bk-sum-img{width:100%;height:180px;object-fit:cover;margin-bottom:20px}
+.bk-sum-room{font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--ivory);margin-bottom:4px}
+.bk-sum-loc{font-size:12px;color:var(--muted);margin-bottom:24px}
+.bk-sum-row{display:flex;justify-content:space-between;font-size:13px;padding:10px 0;border-bottom:1px solid var(--border2)}
+.bk-sum-row span:first-child{color:var(--muted)}
+.bk-sum-row span:last-child{font-weight:500;color:var(--ivory)}
+.bk-sum-total{background:var(--bg2);padding:18px;display:flex;justify-content:space-between;align-items:center;margin-top:16px;border:1px solid var(--border)}
+.bk-sum-total span:first-child{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.bk-sum-total span:last-child{font-family:var(--font-display);font-size:30px;font-weight:600;color:var(--gold)}
+/* Palette widget in sidebar */
+.palette-widget{background:var(--bg2);border:1px solid var(--border);padding:20px}
+.pw-title{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.pw-swatches{display:flex;height:40px;overflow:hidden;gap:2px}
+.pw-swatch{flex:1;cursor:pointer;transition:flex .3s;position:relative}
+.pw-swatches:hover .pw-swatch{flex:.5}
+.pw-swatches:hover .pw-swatch:hover{flex:3}
+.pw-swatch-tip{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border);padding:5px 10px;font-size:9px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s}
+.pw-swatch:hover .pw-swatch-tip{opacity:1}
+.pw-labels{display:grid;grid-template-columns:repeat(7,1fr);margin-top:8px;gap:2px}
+.pw-label{font-size:8px;text-align:center;color:var(--muted2);overflow:hidden;text-overflow:ellipsis}
+ 
+/* Confirm modal */
+.confirm-modal{position:fixed;inset:0;background:rgba(0,0,0,.92);backdrop-filter:blur(16px);z-index:900;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
+.confirm-modal.open{opacity:1;pointer-events:all}
+.confirm-box{background:var(--surface);border:1px solid var(--border);max-width:520px;width:100%;padding:60px 52px;text-align:center;transform:scale(.9);transition:transform .4s var(--ease)}
+.confirm-modal.open .confirm-box{transform:scale(1)}
+.confirm-icon{font-size:64px;margin-bottom:24px}
+.confirm-title{font-family:var(--font-display);font-size:38px;font-weight:300;font-style:italic;color:var(--gold2);margin-bottom:14px}
+.confirm-text{font-family:var(--font-display);font-size:17px;font-weight:300;font-style:italic;color:var(--muted);line-height:1.7;margin-bottom:28px}
+.confirm-ref{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:32px;padding:12px;border:1px solid var(--border)}
+ 
+/* ═══════════════════════════════════════════════════
+   PAGE 4 — AMENITIES
+═══════════════════════════════════════════════════ */
+.amen-tabs{display:flex;gap:0;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto}
+.atab{padding:18px 28px;font-size:10px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .25s;white-space:nowrap;border-bottom:2px solid transparent;background:transparent;border-top:none;border-left:none;border-right:none}
+.atab:hover,.atab.on{color:var(--gold);border-bottom-color:var(--gold)}
+.amen-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);margin-top:56px}
+.amen-card{background:var(--surface);padding:36px 32px;display:grid;grid-template-columns:72px 1fr;gap:24px;transition:background .3s;position:relative;overflow:hidden}
+.amen-card::after{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gold);transform:scaleY(0);transform-origin:bottom;transition:transform .4s var(--ease)}
+.amen-card:hover{background:var(--surface2)}
+.amen-card:hover::after{transform:scaleY(1)}
+.amen-ico-box{width:72px;height:72px;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;transition:border-color .3s}
+.amen-card:hover .amen-ico-box{border-color:var(--gold)}
+.amen-name{font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--ivory);margin-bottom:8px}
+.amen-desc{font-size:13px;color:var(--muted);line-height:1.7}
+.amen-tag-wrap{margin-top:12px}
+.spa-showcase{display:grid;grid-template-columns:1fr 1fr;min-height:600px}
+.spa-show-img{overflow:hidden;position:relative}
+.spa-show-img img{width:100%;height:100%;object-fit:cover;transition:transform .8s}
+.spa-show-img:hover img{transform:scale(1.04)}
+.spa-show-img-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(10,9,8,.5) 0%,transparent 60%)}
+.spa-show-content{background:var(--surface);padding:80px 64px;display:flex;flex-direction:column;justify-content:center}
+.spa-treats{display:flex;flex-direction:column;gap:10px;margin-top:28px}
+.spa-treat{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:var(--bg2);border:1px solid var(--border);transition:border-color .25s}
+.spa-treat:hover{border-color:var(--gold)}
+.spa-treat-n{font-size:14px;font-weight:400;color:var(--warm)}
+.spa-treat-p{font-family:var(--font-display);font-size:18px;font-weight:600;color:var(--gold)}
+ 
+/* ═══════════════════════════════════════════════════
+   PAGE 5 — GALLERY
+═══════════════════════════════════════════════════ */
+.gallery-filters{display:flex;gap:10px;padding:24px 64px;background:var(--surface);border-bottom:1px solid var(--border)}
+.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;padding:3px;background:var(--border)}
+.gallery-item{overflow:hidden;position:relative;cursor:pointer;aspect-ratio:1}
+.gallery-item.wide{grid-column:span 2}
+.gallery-item.tall{grid-row:span 2}
+.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease);filter:brightness(.8)}
+.gallery-item:hover img{transform:scale(1.08)}
+.gallery-item-overlay{position:absolute;inset:0;background:rgba(0,0,0,0);display:flex;align-items:center;justify-content:center;transition:background .3s}
+.gallery-item:hover .gallery-item-overlay{background:rgba(0,0,0,.4)}
+.gallery-item-overlay span{font-size:28px;color:white;opacity:0;transition:opacity .3s}
+.gallery-item:hover .gallery-item-overlay span{opacity:1}
+.gallery-lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:800;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .4s}
+.gallery-lightbox.open{opacity:1;pointer-events:all}
+.gallery-lightbox img{max-width:90%;max-height:85vh;object-fit:contain;border:1px solid var(--border)}
+.gl-close{position:absolute;top:24px;right:24px;width:44px;height:44px;background:rgba(255,255,255,.08);border:1px solid var(--border);color:var(--ivory);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s}
+.gl-close:hover{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.gl-prev,.gl-next{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--ivory);font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s}
+.gl-prev{left:24px}
+.gl-next{right:24px}
+.gl-prev:hover,.gl-next:hover{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+ 
+/* ═══════════════════════════════════════════════════
+   PAGE 6 — DINING
+═══════════════════════════════════════════════════ */
+.dining-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.dining-card{display:grid;grid-template-columns:1fr 1fr;min-height:440px;background:var(--surface);position:relative;overflow:hidden}
+.dining-card:nth-child(even){direction:rtl}
+.dining-card:nth-child(even) .dc-content{direction:ltr}
+.dc-img{overflow:hidden;position:relative}
+.dc-img img{width:100%;height:100%;object-fit:cover;transition:transform .8s;filter:brightness(.7)}
+.dc-img:hover img{transform:scale(1.06)}
+.dc-content{direction:ltr;padding:48px 44px;display:flex;flex-direction:column;justify-content:center}
+.dc-name{font-family:var(--font-display);font-size:28px;font-weight:600;color:var(--ivory);margin-bottom:8px;margin-top:16px}
+.dc-desc{font-size:14px;color:var(--muted);line-height:1.75;margin-bottom:24px}
+.dc-hours{font-size:11px;letter-spacing:1.5px;color:var(--gold)}
+.dc-stars{font-size:12px;color:var(--gold);letter-spacing:4px}
+/* Menu */
+.menu-section{background:var(--bg2);padding:80px 64px}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:56px}
+.menu-cat{background:var(--surface);border:1px solid var(--border);padding:36px}
+.menu-cat-title{font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--gold2);margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.menu-item{display:flex;justify-content:space-between;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border2)}
+.menu-item:last-child{border-bottom:none}
+.mi-name{font-size:14px;font-weight:500;color:var(--ivory);margin-bottom:3px}
+.mi-desc{font-size:11px;color:var(--muted);line-height:1.5}
+.mi-price{font-family:var(--font-display);font-size:18px;font-weight:600;color:var(--gold);flex-shrink:0;margin-left:16px}
+ 
+/* ═══════════════════════════════════════════════════
+   PAGE 7 — EVENTS
+═══════════════════════════════════════════════════ */
+.events-hero-grid{display:grid;grid-template-columns:1fr 1fr;min-height:60vh}
+.events-hero-content{background:var(--bg);padding:160px 64px 80px;display:flex;flex-direction:column;justify-content:center}
+.events-hero-img{overflow:hidden}
+.events-hero-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.65)}
+.venues-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);margin-top:56px}
+.venue-card{background:var(--surface);overflow:hidden;cursor:pointer;transition:background .3s}
+.venue-card:hover{background:var(--surface2)}
+.venue-card img{width:100%;height:220px;object-fit:cover;transition:transform .6s;filter:brightness(.75)}
+.venue-card:hover img{transform:scale(1.05)}
+.venue-body{padding:28px}
+.venue-name{font-family:var(--font-display);font-size:22px;font-weight:600;color:var(--ivory);margin-bottom:8px}
+.venue-specs{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}
+.venue-spec{font-size:11px;color:var(--muted)}
+.events-form{background:var(--surface);border:1px solid var(--border);padding:56px;margin-top:60px}
+.ev-form-title{font-family:var(--font-display);font-size:28px;font-weight:600;color:var(--ivory);margin-bottom:32px}
+ 
+/* ═══════════════════════════════════════════════════
+   PAGE 8 — ABOUT
+═══════════════════════════════════════════════════ */
+.about-split{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:70vh}
+.about-img{overflow:hidden;position:relative}
+.about-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.7)}
+.about-content{padding:100px 72px;display:flex;flex-direction:column;justify-content:center;background:var(--surface)}
+.timeline{display:flex;flex-direction:column;gap:0;margin-top:36px}
+.tl-item{display:grid;grid-template-columns:70px 1fr;gap:20px;padding-bottom:28px;position:relative}
+.tl-item:not(:last-child)::before{content:'';position:absolute;left:34px;top:28px;bottom:0;width:1px;background:var(--border)}
+.tl-year{font-family:var(--font-display);font-size:14px;font-weight:600;color:var(--gold)}
+.tl-dot{position:absolute;left:29px;top:5px;width:12px;height:12px;background:var(--gold);border:2px solid var(--bg)}
+.tl-t{font-size:14px;font-weight:500;color:var(--ivory);margin-bottom:4px}
+.tl-d{font-size:13px;color:var(--muted);line-height:1.6}
+.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)}
+.team-card{background:var(--surface);overflow:hidden;transition:background .3s}
+.team-card:hover{background:var(--surface2)}
+.team-card img{width:100%;height:280px;object-fit:cover;filter:brightness(.75);transition:transform .6s}
+.team-card:hover img{transform:scale(1.04)}
+.team-body{padding:24px}
+.team-name{font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--ivory);margin-bottom:4px}
+.team-role{font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold)}
+.team-bio{font-size:13px;color:var(--muted);line-height:1.6;margin-top:8px}
+.awards-row{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);margin-top:56px}
+.award-card{background:var(--surface);padding:36px 24px;text-align:center;transition:background .3s}
+.award-card:hover{background:var(--surface2)}
+.award-ico{font-size:36px;margin-bottom:14px}
+.award-name{font-family:var(--font-display);font-size:16px;font-weight:600;color:var(--ivory);margin-bottom:6px}
+.award-org{font-size:11px;color:var(--muted)}
+ 
+/* ═══════════════════════════════════════════════════
+   PAGE 9 — LOYALTY
+═══════════════════════════════════════════════════ */
+.loyalty-hero{background:linear-gradient(135deg,var(--bg2) 0%,var(--green) 100%);padding:160px 64px 80px;position:relative;overflow:hidden}
+.loyalty-hero::before{content:'★';font-family:var(--font-display);font-size:600px;color:rgba(196,155,65,.04);position:absolute;top:-150px;right:-100px;pointer-events:none;line-height:1}
+.tiers-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);margin-top:60px}
+.tier-card{background:var(--surface);padding:40px 28px;text-align:center;position:relative;overflow:hidden;transition:all .35s}
+.tier-card.featured{background:var(--gold);transform:scaleY(1.03);z-index:2}
+.tier-card.featured .tier-name,.tier-card.featured .tier-price,.tier-card.featured .tier-perks li{color:var(--bg)}
+.tier-card.featured .tier-desc{color:rgba(10,9,8,.7)}
+.tier-ico{font-size:36px;margin-bottom:16px}
+.tier-name{font-family:var(--font-display);font-size:24px;font-weight:600;color:var(--ivory);margin-bottom:6px}
+.tier-desc{font-size:13px;color:var(--muted);margin-bottom:20px}
+.tier-price{font-family:var(--font-display);font-size:38px;font-weight:600;color:var(--gold);margin-bottom:4px}
+.tier-price-s{font-size:11px;color:var(--muted);margin-bottom:24px}
+.tier-perks{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
+.tier-perks li{font-size:13px;color:var(--warm);display:flex;align-items:center;gap:8px}
+.tier-perks li::before{content:'✦';font-size:10px;color:var(--gold);flex-shrink:0}
+.tier-card.featured .tier-perks li::before{color:var(--bg)}
+.benefits-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:60px}
+.benefit-card{background:var(--surface);border:1px solid var(--border);padding:32px;transition:all .35s}
+.benefit-card:hover{border-color:var(--gold);box-shadow:var(--shg)}
+.benefit-ico{font-size:28px;margin-bottom:16px}
+.benefit-title{font-family:var(--font-display);font-size:20px;font-weight:600;color:var(--ivory);margin-bottom:8px}
+.benefit-desc{font-size:13px;color:var(--muted);line-height:1.7}
+ 
+/* ═══════════════════════════════════════════════════
+   PAGE 10 — CONTACT
+═══════════════════════════════════════════════════ */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:600px}
+.contact-form-side{padding:80px 64px;background:var(--bg)}
+.contact-info-side{background:var(--surface);padding:80px 56px;border-left:1px solid var(--border);position:relative;overflow:hidden}
+.contact-info-side::before{content:'';position:absolute;bottom:-100px;right:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(196,155,65,.06) 0%,transparent 65%)}
+.ci-items{display:flex;flex-direction:column;gap:40px;margin-top:44px}
+.ci-item{display:flex;gap:20px;align-items:flex-start}
+.ci-ico{width:52px;height:52px;background:var(--bg2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.ci-lbl{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.ci-val{font-size:16px;font-weight:400;color:var(--ivory);line-height:1.5}
+.ci-sub{font-size:12px;color:var(--muted);margin-top:3px}
+.map-block{background:var(--surface2);height:380px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);margin:40px 0;position:relative;overflow:hidden}
+.map-bg-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(196,155,65,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(196,155,65,.05) 1px,transparent 1px);background-size:50px 50px}
+.map-pin-wrap{display:flex;flex-direction:column;align-items:center;gap:0;animation:pinFloat 3s ease-in-out infinite}
+.map-pin-ico{width:56px;height:56px;background:var(--gold);border:3px solid var(--bg);border-radius:50% 50% 50% 0;transform:rotate(-45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 30px rgba(196,155,65,.4)}
+.map-pin-ico span{transform:rotate(45deg);font-size:22px}
+.map-pin-label{background:var(--ivory);color:var(--bg);padding:10px 20px;font-size:13px;font-weight:600;margin-top:16px;white-space:nowrap;box-shadow:var(--sh2)}
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);margin-top:56px}
+.faq-item{background:var(--surface)}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:22px 28px;cursor:pointer;transition:background .25s;gap:12px}
+.faq-q:hover{background:var(--surface2)}
+.faq-q-text{font-size:14px;font-weight:500;color:var(--ivory)}
+.faq-ico{font-size:20px;color:var(--gold);flex-shrink:0;transition:transform .3s}
+.faq-item.open .faq-ico{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s var(--ease),padding .3s}
+.faq-a.open{max-height:180px;padding:0 28px 22px}
+.faq-a-text{font-size:13px;color:var(--muted);line-height:1.75}
+ 
+/* ═══════════════════════════════════════════════════
+   AI CHATBOT
+═══════════════════════════════════════════════════ */
+.chat-bubble{position:fixed;bottom:36px;right:36px;z-index:850;width:60px;height:60px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 40px rgba(196,155,65,.45);transition:all .35s var(--ease)}
+.chat-bubble:hover{transform:scale(1.1);background:var(--gold2)}
+.chat-bubble-ico{font-size:24px;transition:transform .35s}
+.chat-bubble.open .chat-bubble-ico{transform:rotate(180deg)}
+.chat-panel{position:fixed;bottom:112px;right:36px;z-index:849;width:400px;height:600px;background:var(--surface);border:1px solid var(--border);box-shadow:var(--sh3);display:flex;flex-direction:column;transform:scale(.9) translateY(20px);opacity:0;pointer-events:none;transition:all .38s var(--ease);transform-origin:bottom right}
+.chat-panel.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all}
+.chat-head{background:var(--bg2);padding:20px 24px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--border);flex-shrink:0}
+.chat-head-av{width:42px;height:42px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.chat-head-info{flex:1}
+.chat-head-name{font-size:14px;font-weight:600;color:var(--ivory)}
+.chat-head-status{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.chat-head-status::before{content:'';width:6px;height:6px;background:#4ade80;border-radius:50%;flex-shrink:0;animation:pulse 2s infinite}
+.chat-head-btns{display:flex;gap:8px}
+.chat-head-btn{width:30px;height:30px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;transition:all .2s}
+.chat-head-btn:hover{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.chat-msgs{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+.chat-msgs::-webkit-scrollbar{width:4px}
+.chat-msgs::-webkit-scrollbar-track{background:transparent}
+.chat-msgs::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.chat-msg{display:flex;gap:10px;align-items:flex-end;max-width:92%}
+.chat-msg.user{flex-direction:row-reverse;margin-left:auto}
+.chat-msg-av{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px}
+.chat-msg.bot .chat-msg-av{background:var(--gold);color:var(--bg)}
+.chat-msg.user .chat-msg-av{background:var(--muted2);color:var(--ivory)}
+.chat-msg-bubble{padding:12px 16px;font-size:13px;line-height:1.65;max-width:100%}
+.chat-msg.bot .chat-msg-bubble{background:var(--surface2);color:var(--warm);border:1px solid var(--border)}
+.chat-msg.user .chat-msg-bubble{background:var(--gold);color:var(--bg)}
+.chat-msg-time{font-size:9px;color:var(--muted2);flex-shrink:0}
+.chat-typing{display:flex;gap:5px;padding:12px 16px;background:var(--surface2);border:1px solid var(--border);width:fit-content}
+.chat-typing span{width:5px;height:5px;background:var(--muted);border-radius:50%;animation:typingDot 1.4s infinite}
+.chat-typing span:nth-child(2){animation-delay:.2s}
+.chat-typing span:nth-child(3){animation-delay:.4s}
+.chat-suggestions{display:flex;flex-wrap:wrap;gap:6px;padding:0 20px 12px}
+.chat-sug{padding:7px 14px;border:1px solid var(--border);font-size:11px;color:var(--warm);cursor:pointer;transition:all .2s;background:transparent}
+.chat-sug:hover{border-color:var(--gold);color:var(--gold)}
+.chat-input-area{padding:16px;border-top:1px solid var(--border);display:flex;gap:10px;flex-shrink:0}
+.chat-input{flex:1;background:var(--surface2);border:1px solid var(--border);color:var(--ivory);padding:12px 16px;font-family:var(--font-ui);font-size:13px;outline:none;transition:border-color .25s;resize:none;height:44px;line-height:1.4}
+.chat-input:focus{border-color:var(--gold)}
+.chat-send{width:44px;height:44px;background:var(--gold);border:none;color:var(--bg);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s;flex-shrink:0}
+.chat-send:hover{background:var(--gold2)}
+.chat-notification{position:absolute;top:-6px;right:-6px;width:20px;height:20px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;animation:pulse 2s infinite}
+.chat-notification.hidden{display:none}
+ 
+/* ═══════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════ */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:80px 64px 36px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:60px;margin-bottom:60px}
+.footer-brand{}
+.footer-logo{font-family:var(--font-display);font-size:24px;font-weight:600;letter-spacing:6px;text-transform:uppercase;color:var(--ivory);margin-bottom:16px}
+.footer-logo span{color:var(--gold)}
+.footer-tagline{font-family:var(--font-display);font-size:16px;font-style:italic;font-weight:300;color:var(--muted);line-height:1.7;max-width:280px;margin-bottom:24px}
+.footer-socials{display:flex;gap:8px}
+.fsoc{width:36px;height:36px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--muted);cursor:pointer;transition:all .25s}
+.fsoc:hover{border-color:var(--gold);color:var(--gold)}
+.footer-col h4{font-family:var(--font-display);font-size:18px;font-weight:600;color:var(--ivory);margin-bottom:20px}
+.footer-links{display:flex;flex-direction:column;gap:10px}
+.footer-links a{font-size:13px;color:var(--muted);transition:color .25s;cursor:pointer}
+.footer-links a:hover{color:var(--gold)}
+.footer-newsletter{margin-top:24px}
+.fn-label{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.fn-form{display:flex;gap:0}
+.fn-input{flex:1;background:var(--surface);border:1px solid var(--border);border-right:none;color:var(--ivory);padding:11px 16px;font-family:var(--font-ui);font-size:13px;outline:none;transition:border-color .25s}
+.fn-input:focus{border-color:var(--gold)}
+.fn-btn{background:var(--gold);border:none;padding:0 20px;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--bg);cursor:pointer;transition:background .25s}
+.fn-btn:hover{background:var(--gold2)}
+.footer-bottom{border-top:1px solid var(--border2);padding-top:24px;display:flex;justify-content:space-between;font-size:11px;color:var(--muted2)}
+ 
+/* ═══════════════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════════════ */
+.toast{position:fixed;bottom:36px;left:36px;background:var(--surface);border:1px solid var(--border);color:var(--ivory);padding:16px 24px;font-size:13px;z-index:9000;display:flex;align-items:center;gap:12px;transform:translateX(-110%);transition:transform .45s var(--ease);box-shadow:var(--sh3)}
+.toast.show{transform:translateX(0)}
+.toast-ico{color:var(--gold);font-size:18px;flex-shrink:0}
+ 
+/* ═══════════════════════════════════════════════════
+   KEYFRAMES
+═══════════════════════════════════════════════════ */
+@keyframes slideUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+@keyframes heroZoom{from{transform:scale(1.06)}to{transform:scale(1)}}
+@keyframes rotateSlow{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes typingDot{0%,80%,100%{transform:scale(1);opacity:.4}40%{transform:scale(1.2);opacity:1}}
+@keyframes pinFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+ 
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════ */
+@media(max-width:1100px){
+  .hero,.home-feature,.contact-grid,.about-split,.dining-card,.events-hero-grid,.spa-showcase{grid-template-columns:1fr}
+  .hero-r{height:55vh;order:-1}
+  .hero-l{padding:130px 40px 60px}
+  .home-feature .hf-img{height:400px}
+  .dining-card{direction:ltr}
+  .about-img{height:50vh}
+  .events-hero-img{height:45vh}
+  .dest-row{grid-template-columns:repeat(3,1fr)}
+  .rooms-grid{grid-template-columns:1fr 1fr}
+  .team-grid{grid-template-columns:1fr 1fr}
+  .awards-row{grid-template-columns:repeat(3,1fr)}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:40px}
+  .bk-content{grid-template-columns:1fr}
+  .rd-body{grid-template-columns:1fr}
+  .rd-imgs{height:260px}
+  nav{padding:20px 28px}
+  nav.solid{padding:14px 28px}
+  .nav-links{display:none}
+  .nav-hamburger{display:flex}
+  .section{padding:70px 32px}
+  .search-wrap{margin:0 28px;margin-top:-32px;grid-template-columns:1fr 1fr}
+  .s-go{grid-column:1/-1;padding:18px}
+  .amen-grid{grid-template-columns:1fr}
+  .menu-grid,.faq-grid,.benefits-grid{grid-template-columns:1fr}
+  .tiers-grid{grid-template-columns:1fr 1fr}
+  .venues-grid{grid-template-columns:1fr 1fr}
+  .dining-grid{grid-template-columns:1fr}
+  .chat-panel{width:calc(100vw - 48px);right:24px}
+  .rooms-filters,.rooms-wrap,.gallery-filters,.amen-tabs,.bk-steps{padding-left:28px;padding-right:28px}
+  .gallery-grid{grid-template-columns:1fr 1fr}
+  .gallery-item.wide{grid-column:span 1}
+  footer{padding:60px 32px 28px}
+  .footer-bottom{flex-direction:column;gap:8px}
+}
+@media(max-width:640px){
+  .hero-stats{grid-template-columns:1fr 1fr}
+  .rooms-grid,.tiers-grid,.venues-grid,.awards-row{grid-template-columns:1fr}
+  .dest-row{grid-template-columns:1fr 1fr}
+  .team-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr}
+  .why-grid{grid-template-columns:1fr}
+  .testi-grid{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  .rd-features{grid-template-columns:1fr}
+  .chat-bubble{bottom:24px;right:24px}
+  .chat-panel{bottom:96px;right:16px;width:calc(100vw - 32px)}
+  .toast{left:16px;right:16px;width:auto}
+}
+</style>
+</head>
+<body>
+ 
+<div id="PROG"></div>
+<div id="CUR"></div>
+<div id="CURR"></div>
+ 
+<!-- ═══════════════════════════════════════════════════
+     NAVIGATION
+═══════════════════════════════════════════════════ -->
+<nav id="NAV">
+  <div class="nav-logo" onclick="goPage('home')">AURUM<span>GRAND</span></div>
+  <div class="nav-links" id="NAVL">
+    <a data-page="home" class="active" onclick="goPage('home')">Home</a>
+    <a data-page="rooms" onclick="goPage('rooms')">Rooms</a>
+    <a data-page="dining" onclick="goPage('dining')">Dining</a>
+    <a data-page="amenities" onclick="goPage('amenities')">Amenities</a>
+    <a data-page="gallery" onclick="goPage('gallery')">Gallery</a>
+    <a data-page="events" onclick="goPage('events')">Events</a>
+    <a data-page="about" onclick="goPage('about')">About</a>
+    <a data-page="loyalty" onclick="goPage('loyalty')">Loyalty</a>
+    <a data-page="contact" onclick="goPage('contact')">Contact</a>
+    <a class="nav-book" onclick="goPage('booking')">Reserve</a>
+  </div>
+  <div class="nav-hamburger" id="BURG" onclick="toggleMob()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+ 
+<!-- Mobile Nav -->
+<div class="mob-overlay" id="MOBB" onclick="closeMob()"></div>
+<div class="mob-nav" id="MOBN">
+  <a onclick="goPage('home');closeMob()">Home</a>
+  <a onclick="goPage('rooms');closeMob()">Rooms</a>
+  <a onclick="goPage('dining');closeMob()">Dining</a>
+  <a onclick="goPage('amenities');closeMob()">Amenities</a>
+  <a onclick="goPage('gallery');closeMob()">Gallery</a>
+  <a onclick="goPage('events');closeMob()">Events</a>
+  <a onclick="goPage('about');closeMob()">About</a>
+  <a onclick="goPage('loyalty');closeMob()">Loyalty</a>
+  <a onclick="goPage('contact');closeMob()">Contact</a>
+  <a onclick="goPage('booking');closeMob()" style="color:var(--gold)">Reserve →</a>
+</div>
+ 
+<!-- ═══════════════════════════════════════════════════
+     PAGE 1 — HOME
+═══════════════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-l">
+      <div class="hero-label">Est. 1997 · Monaco</div>
+      <h1 class="hero-h1"><strong>Where</strong><em>Extraordinary</em><strong>Lives</strong></h1>
+      <p class="hero-desc">A world where every detail whispers of perfection — crafted for those who demand nothing less than the extraordinary.</p>
+      <div class="hero-actions">
+        <button class="btn btn-gold" onclick="goPage('rooms')"><span>Explore Rooms</span></button>
+        <button class="btn btn-outline" onclick="goPage('about')"><span>Our Story</span></button>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><div class="hstat-n" id="hs1">0</div><div class="hstat-l">Suites</div></div>
+        <div class="hstat"><div class="hstat-n" id="hs2">0</div><div class="hstat-l">Destinations</div></div>
+        <div class="hstat"><div class="hstat-n" id="hs3">0</div><div class="hstat-l">Awards</div></div>
+        <div class="hstat"><div class="hstat-n" id="hs4">0</div><div class="hstat-l">Years</div></div>
+      </div>
+      <div class="hero-scroll">
+        <div class="hero-scroll-line"></div>
+        <span class="hero-scroll-t">Discover more</span>
+      </div>
+    </div>
+    <div class="hero-r">
+      <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1000&q=80" alt="Aurum Grand">
+      <div class="hero-r-overlay"></div>
+      <div class="hero-badge"><div class="hero-badge-t">5 ★<br>2025</div></div>
+    </div>
+  </section>
+ 
+  <!-- Search -->
+  <div class="search-wrap">
+    <div class="sf"><label>Destination</label><input type="text" placeholder="Monaco, Dubai, Bali…" id="h-dest"></div>
+    <div class="sf"><label>Check In</label><input type="date" id="h-in"></div>
+    <div class="sf"><label>Check Out</label><input type="date" id="h-out"></div>
+    <div class="sf"><label>Guests</label><select id="h-guests"><option>1 Guest</option><option selected>2 Guests</option><option>3 Guests</option><option>4+ Guests</option></select></div>
+    <button class="s-go" onclick="homeSearch()">Search →</button>
+  </div>
+ 
+  <!-- Why -->
+  <section class="section">
+    <div class="rv"><div class="s-eyebrow">The Aurum Difference</div><h2 class="s-title">Crafted for the<br><em>Discerning</em></h2></div>
+    <div class="why-grid">
+      <div class="why-card rv d1"><div class="why-ico">🏆</div><div class="why-t">68 Awards & Counting</div><p class="why-d">Recognized globally for excellence in luxury, design, and guest experience across five continents.</p></div>
+      <div class="why-card rv d2"><div class="why-ico">⭐</div><div class="why-t">5 Michelin Stars</div><p class="why-d">Our culinary collection holds five Michelin stars across three restaurants — a testament to extraordinary gastronomy.</p></div>
+      <div class="why-card rv d3"><div class="why-ico">🛎️</div><div class="why-t">Anticipatory Service</div><p class="why-d">Your dedicated concierge team anticipates every desire before it's spoken. Nothing is too rare, nothing impossible.</p></div>
+      <div class="why-card rv d1"><div class="why-ico">🌿</div><div class="why-t">Carbon Neutral Since 2020</div><p class="why-d">Luxury and responsibility coexist. Every amenity is ethically sourced; our footprint, minimal by design.</p></div>
+      <div class="why-card rv d2"><div class="why-ico">🔒</div><div class="why-t">Absolute Privacy</div><p class="why-d">Bespoke privacy protocols ensure your sanctuary remains yours. We pioneer discretion in the modern age.</p></div>
+      <div class="why-card rv d3"><div class="why-ico">✈️</div><div class="why-t">Seamless Arrival</div><p class="why-d">Helicopter transfers, chauffeured limousines, private yachts — your journey begins the moment you contact us.</p></div>
+    </div>
+  </section>
+ 
+  <!-- Feature block -->
+  <div class="home-feature rv">
+    <div class="hf-img"><img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&q=70" alt="Penthouse"><div class="hf-img-overlay"></div></div>
+    <div class="hf-content">
+      <div class="s-eyebrow">Signature Experience</div>
+      <h2 class="s-title" style="font-size:clamp(32px,3.5vw,54px)">The Royal<br><em>Penthouse</em></h2>
+      <div class="line"></div>
+      <p class="s-sub">250m² of pure luxury. A private rooftop pool, home cinema, personal chef — and views that redefine the word panorama.</p>
+      <div style="display:flex;gap:14px;margin-top:32px">
+        <button class="btn btn-gold" onclick="openRoom(5)"><span>View Suite</span></button>
+        <button class="btn btn-outline" onclick="goPage('booking')"><span>Reserve</span></button>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- Destinations -->
+  <section class="section" style="background:var(--bg2)">
+    <div class="rv"><div class="s-eyebrow">Our Destinations</div><h2 class="s-title">A World of <em>Possibilities</em></h2></div>
+    <div class="dest-row">
+      <div class="dest-card rv d1" onclick="goPage('rooms')"><img src="https://images.unsplash.com/photo-1533929736458-ca588d08c8be?w=400&q=70" alt="Monaco"><div class="dest-card-info"><div class="dest-card-name">Monaco</div><div class="dest-card-props">12 Properties</div></div><div class="dest-arrow">→</div></div>
+      <div class="dest-card rv d2" onclick="goPage('rooms')"><img src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=400&q=70" alt="Dubai"><div class="dest-card-info"><div class="dest-card-name">Dubai</div><div class="dest-card-props">8 Properties</div></div><div class="dest-arrow">→</div></div>
+      <div class="dest-card rv d3" onclick="goPage('rooms')"><img src="https://images.unsplash.com/photo-1601581875039-e899893d520c?w=400&q=70" alt="Santorini"><div class="dest-card-info"><div class="dest-card-name">Santorini</div><div class="dest-card-props">5 Properties</div></div><div class="dest-arrow">→</div></div>
+      <div class="dest-card rv d4" onclick="goPage('rooms')"><img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400&q=70" alt="Bali"><div class="dest-card-info"><div class="dest-card-name">Bali</div><div class="dest-card-props">9 Properties</div></div><div class="dest-arrow">→</div></div>
+      <div class="dest-card rv d5" onclick="goPage('rooms')"><img src="https://images.unsplash.com/photo-1490349368154-73de9c9bc37c?w=400&q=70" alt="Maldives"><div class="dest-card-info"><div class="dest-card-name">Maldives</div><div class="dest-card-props">4 Properties</div></div><div class="dest-arrow">→</div></div>
+    </div>
+  </section>
+ 
+  <!-- Offer -->
+  <div class="offer-strip rv">
+    <div>
+      <div class="s-eyebrow" style="color:rgba(196,155,65,.6)">Limited Offer — Summer 2025</div>
+      <h2 class="offer-h">Penthouse Summer Escape<br><em>28% Exclusive Savings</em></h2>
+      <p class="offer-sub">Book any Penthouse Suite for stays between June–September. Includes complimentary spa, champagne welcome, and late checkout at noon.</p>
+      <button class="btn btn-gold" style="margin-top:28px" onclick="goPage('booking')"><span>Claim Offer →</span></button>
+    </div>
+    <div class="countdown">
+      <div class="cd-box"><div class="cd-n" id="cd-d">14</div><div class="cd-l">Days</div></div>
+      <div class="cd-box"><div class="cd-n" id="cd-h">09</div><div class="cd-l">Hrs</div></div>
+      <div class="cd-box"><div class="cd-n" id="cd-m">32</div><div class="cd-l">Min</div></div>
+      <div class="cd-box"><div class="cd-n" id="cd-s">00</div><div class="cd-l">Sec</div></div>
+    </div>
+  </div>
+ 
+  <!-- Testimonials -->
+  <section class="section">
+    <div style="text-align:center" class="rv"><div class="s-eyebrow">Guest Voices</div><h2 class="s-title" style="text-align:center">Words of <em>Praise</em></h2><div class="line c"></div></div>
+    <div class="testi-grid">
+      <div class="testi-card rv d1"><div class="testi-stars">★★★★★</div><p class="testi-q">"The most extraordinary week of my life. Every morning felt like waking inside a dream — the kind you never want to leave."</p><div class="testi-author"><div class="testi-av">S</div><div><div class="testi-name">Sophia Marceau</div><div class="testi-loc">Paris, France</div></div></div></div>
+      <div class="testi-card rv d2" style="background:var(--surface2)"><div class="testi-stars">★★★★★</div><p class="testi-q">"The penthouse redefined luxury for me entirely. The concierge team anticipated every need before I voiced it. Extraordinary."</p><div class="testi-author"><div class="testi-av">J</div><div><div class="testi-name">James Whitmore</div><div class="testi-loc">London, UK</div></div></div></div>
+      <div class="testi-card rv d3"><div class="testi-stars">★★★★★</div><p class="testi-q">"From helicopter arrival to farewell champagne — every detail whispered 'you are home'. Already booking our return."</p><div class="testi-author"><div class="testi-av">A</div><div><div class="testi-name">Amara Osei</div><div class="testi-loc">Dubai, UAE</div></div></div></div>
+    </div>
+  </section>
+</div>
+ 
+<!-- ═══════════════════════════════════════════════════
+     PAGE 2 — ROOMS
+═══════════════════════════════════════════════════ -->
+<div class="page" id="page-rooms">
+  <div class="page-hero" style="position:relative">
+    <div class="rv"><div class="s-eyebrow">Accommodations</div><h1 class="s-title" style="margin-top:10px">Rooms &amp; <em>Suites</em></h1><p class="s-sub">Each space a sanctuary — curated with obsessive attention to every detail.</p></div>
+  </div>
+  <div class="rooms-filters">
+    <button class="filt on" onclick="filterR('all',this)">All</button>
+    <button class="filt" onclick="filterR('classic',this)">Classic</button>
+    <button class="filt" onclick="filterR('deluxe',this)">Deluxe</button>
+    <button class="filt" onclick="filterR('suite',this)">Suites</button>
+    <button class="filt" onclick="filterR('villa',this)">Villas</button>
+    <div class="filt-sort">Sort: <select onchange="sortR(this.value)"><option value="f">Featured</option><option value="pl">Price ↑</option><option value="ph">Price ↓</option><option value="r">Rating</option></select></div>
+  </div>
+  <div class="rooms-wrap"><div class="rooms-grid" id="RGRID"></div></div>
+</div>
+ 
+<!-- Room Detail -->
+<div class="rd-overlay" id="RDO" onclick="closeRDO(event)">
+  <div class="rd-box">
+    <button class="rd-close" onclick="closeRDOBtn()">✕</button>
+    <div class="rd-imgs" id="RD-IMGS"></div>
+    <div class="rd-body">
+      <div>
+        <div id="RD-TAG" style="margin-bottom:12px"></div>
+        <h2 id="RD-NAME" style="font-family:var(--font-display);font-size:32px;font-weight:600;color:var(--ivory)"></h2>
+        <p id="RD-DESC" style="font-family:var(--font-display);font-size:17px;font-style:italic;font-weight:300;color:var(--muted);line-height:1.75;margin-top:14px"></p>
+        <div class="rd-features" id="RD-FEATS"></div>
+      </div>
+      <div class="rd-book-box">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px">From</div>
+        <div class="rd-book-price" id="RD-PRICE"></div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">per night · all taxes included</div>
+        <div class="rd-fields">
+          <div class="rd-field"><label>Check In</label><input type="date" id="RD-IN"></div>
+          <div class="rd-field"><label>Check Out</label><input type="date" id="RD-OUT"></div>
+          <div class="rd-field"><label>Guests</label><select><option>1 Guest</option><option selected>2 Guests</option><option>3 Guests</option><option>4 Guests</option></select></div>
+          <button class="btn btn-gold" style="width:100%;justify-content:center" onclick="bookFromDetail()"><span>Reserve This Room →</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- ═══════════════════════════════════════════════════
+     PAGE 3 — BOOKING
+═══════════════════════════════════════════════════ -->
+<div class="page" id="page-booking">
+  <div class="page-hero" style="padding-bottom:0">
+    <div class="rv"><div class="s-eyebrow">Reservations</div><h1 class="s-title" style="margin-top:10px">Reserve Your <em>Stay</em></h1></div>
+  </div>
+  <div class="bk-steps">
+    <div class="bk-step active" id="BS1"><div class="bk-step-n">1</div><div class="bk-step-info"><div class="bk-step-label">Step 01</div><div class="bk-step-name">Room & Dates</div></div></div>
+    <div class="bk-step" id="BS2"><div class="bk-step-n">2</div><div class="bk-step-info"><div class="bk-step-label">Step 02</div><div class="bk-step-name">Your Details</div></div></div>
+    <div class="bk-step" id="BS3"><div class="bk-step-n">3</div><div class="bk-step-info"><div class="bk-step-label">Step 03</div><div class="bk-step-name">Extras</div></div></div>
+    <div class="bk-step" id="BS4"><div class="bk-step-n">4</div><div class="bk-step-info"><div class="bk-step-label">Step 04</div><div class="bk-step-name">Payment</div></div></div>
+  </div>
+  <div class="bk-content">
+    <div class="bk-form-area">
+      <!-- Step 1 -->
+      <div id="BKS1">
+        <div class="bk-form-title">Choose Your Room &amp; Dates</div>
+        <div class="form-grid">
+          <div class="fg"><label>Destination</label><input type="text" placeholder="Monaco, Dubai, Santorini…" id="bk1-dest"></div>
+          <div class="fg"><label>Room Type</label><select id="bk1-room" onchange="updateBkSummary()"><option value="">Select a room…</option><option value="220|Classic Elegance">Classic Elegance — $220/night</option><option value="320|Skyline Deluxe">Skyline Deluxe — $320/night</option><option value="480|Garden View Suite">Garden View Suite — $480/night</option><option value="680|Ocean Horizon Suite">Ocean Horizon Suite — $680/night</option><option value="1200|Royal Penthouse">Royal Penthouse — $1,200/night</option><option value="2800|Infinity Pool Villa">Infinity Pool Villa — $2,800/night</option></select></div>
+          <div class="fg"><label>Check In</label><input type="date" id="bk1-in" onchange="updateBkSummary()"></div>
+          <div class="fg"><label>Check Out</label><input type="date" id="bk1-out" onchange="updateBkSummary()"></div>
+          <div class="fg"><label>Adults</label><select id="bk1-adults"><option>1 Adult</option><option selected>2 Adults</option><option>3 Adults</option><option>4 Adults</option></select></div>
+          <div class="fg"><label>Children</label><select id="bk1-child"><option selected>0 Children</option><option>1 Child</option><option>2 Children</option><option>3 Children</option></select></div>
+          <div class="fg full"><label>Special Requests</label><textarea placeholder="Early check-in, flowers, dietary needs, celebration setup…" id="bk1-req"></textarea></div>
+        </div>
+        <div class="bk-nav"><span style="font-size:12px;color:var(--muted)">All fields optional except room type</span><button class="btn btn-gold" onclick="bkNext(1)"><span>Continue →</span></button></div>
+      </div>
+      <!-- Step 2 -->
+      <div id="BKS2" style="display:none">
+        <div class="bk-form-title">Personal Information</div>
+        <div class="form-grid">
+          <div class="fg"><label>First Name</label><input type="text" placeholder="First name" id="bk2-fn"></div>
+          <div class="fg"><label>Last Name</label><input type="text" placeholder="Last name" id="bk2-ln"></div>
+          <div class="fg"><label>Email Address</label><input type="email" placeholder="you@email.com" id="bk2-em"></div>
+          <div class="fg"><label>Phone Number</label><input type="tel" placeholder="+1 555 000 0000" id="bk2-ph"></div>
+          <div class="fg"><label>Nationality</label><select><option>Select…</option><option>Kosovar</option><option>Albanian</option><option>British</option><option>French</option><option>American</option><option>German</option><option>Italian</option><option>Other</option></select></div>
+          <div class="fg"><label>Estimated Arrival</label><select><option>Before 12PM</option><option selected>12PM – 3PM</option><option>3PM – 6PM</option><option>After 6PM</option></select></div>
+        </div>
+        <div class="bk-nav"><button class="btn btn-dark" onclick="bkPrev(2)"><span>← Back</span></button><button class="btn btn-gold" onclick="bkNext(2)"><span>Continue →</span></button></div>
+      </div>
+      <!-- Step 3 -->
+      <div id="BKS3" style="display:none">
+        <div class="bk-form-title">Enhance Your Stay</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <label class="extra-opt" style="display:flex;align-items:center;gap:14px;padding:18px;background:var(--surface2);border:1px solid var(--border);cursor:pointer;transition:border-color .25s"><input type="checkbox" style="accent-color:var(--gold);width:16px;height:16px"><span><strong style="color:var(--ivory);display:block;font-size:14px">Champagne Welcome</strong><span style="font-size:12px;color:var(--muted)">Moët & Chandon on arrival</span></span><span style="margin-left:auto;color:var(--gold);font-family:var(--font-display);font-size:16px;font-weight:600">+$80</span></label>
+          <label class="extra-opt" style="display:flex;align-items:center;gap:14px;padding:18px;background:var(--surface2);border:1px solid var(--border);cursor:pointer;transition:border-color .25s"><input type="checkbox" style="accent-color:var(--gold);width:16px;height:16px"><span><strong style="color:var(--ivory);display:block;font-size:14px">Spa Treatment (60 min)</strong><span style="font-size:12px;color:var(--muted)">Choice of massage or facial</span></span><span style="margin-left:auto;color:var(--gold);font-family:var(--font-display);font-size:16px;font-weight:600">+$180</span></label>
+          <label class="extra-opt" style="display:flex;align-items:center;gap:14px;padding:18px;background:var(--surface2);border:1px solid var(--border);cursor:pointer;transition:border-color .25s"><input type="checkbox" style="accent-color:var(--gold);width:16px;height:16px"><span><strong style="color:var(--ivory);display:block;font-size:14px">Airport Helicopter</strong><span style="font-size:12px;color:var(--muted)">Private transfer both ways</span></span><span style="margin-left:auto;color:var(--gold);font-family:var(--font-display);font-size:16px;font-weight:600">+$950</span></label>
+          <label class="extra-opt" style="display:flex;align-items:center;gap:14px;padding:18px;background:var(--surface2);border:1px solid var(--border);cursor:pointer;transition:border-color .25s"><input type="checkbox" style="accent-color:var(--gold);width:16px;height:16px"><span><strong style="color:var(--ivory);display:block;font-size:14px">Rose Petal Setup</strong><span style="font-size:12px;color:var(--muted)">Romantic room decoration</span></span><span style="margin-left:auto;color:var(--gold);font-family:var(--font-display);font-size:16px;font-weight:600">+$120</span></label>
+          <label class="extra-opt" style="display:flex;align-items:center;gap:14px;padding:18px;background:var(--surface2);border:1px solid var(--border);cursor:pointer;transition:border-color .25s"><input type="checkbox" style="accent-color:var(--gold);width:16px;height:16px"><span><strong style="color:var(--ivory);display:block;font-size:14px">Daily Breakfast</strong><span style="font-size:12px;color:var(--muted)">Full à la carte each morning</span></span><span style="margin-left:auto;color:var(--gold);font-family:var(--font-display);font-size:16px;font-weight:600">+$65</span></label>
+          <label class="extra-opt" style="display:flex;align-items:center;gap:14px;padding:18px;background:var(--surface2);border:1px solid var(--border);cursor:pointer;transition:border-color .25s"><input type="checkbox" style="accent-color:var(--gold);width:16px;height:16px"><span><strong style="color:var(--ivory);display:block;font-size:14px">In-Suite Dining Experience</strong><span style="font-size:12px;color:var(--muted)">Private chef dinner for 2</span></span><span style="margin-left:auto;color:var(--gold);font-family:var(--font-display);font-size:16px;font-weight:600">+$380</span></label>
+        </div>
+        <div class="bk-nav" style="margin-top:28px"><button class="btn btn-dark" onclick="bkPrev(3)"><span>← Back</span></button><button class="btn btn-gold" onclick="bkNext(3)"><span>Continue →</span></button></div>
+      </div>
+      <!-- Step 4 -->
+      <div id="BKS4" style="display:none">
+        <div class="bk-form-title">Secure Payment</div>
+        <div style="display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap">
+          <div style="padding:9px 20px;border:1px solid var(--gold);font-size:11px;letter-spacing:1px;color:var(--gold);background:rgba(196,155,65,.06)">💳 Credit Card</div>
+          <div style="padding:9px 20px;border:1px solid var(--border);font-size:11px;letter-spacing:1px;color:var(--muted);cursor:pointer" onclick="showToast('Wire transfer details sent to your email')">🏦 Wire Transfer</div>
+          <div style="padding:9px 20px;border:1px solid var(--border);font-size:11px;letter-spacing:1px;color:var(--muted);cursor:pointer" onclick="showToast('Digital wallet payment selected')">📱 Digital Wallet</div>
+        </div>
+        <div class="form-grid">
+          <div class="fg full"><label>Cardholder Name</label><input type="text" placeholder="As printed on card" id="bk4-cn"></div>
+          <div class="fg full"><label>Card Number</label><input type="text" placeholder="•••• •••• •••• ••••" maxlength="19" id="bk4-cc" oninput="fmtCard(this)"></div>
+          <div class="fg"><label>Expiry</label><input type="text" placeholder="MM / YY" maxlength="7" id="bk4-exp" oninput="fmtExp(this)"></div>
+          <div class="fg"><label>CVV</label><input type="password" placeholder="•••" maxlength="4"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;margin-top:20px;padding:14px 18px;background:rgba(42,64,48,.2);border:1px solid rgba(42,64,48,.4)"><span style="font-size:18px">🔒</span><span style="font-size:12px;color:var(--muted)">256-bit SSL encryption. We never store full card details.</span></div>
+        <div class="bk-nav" style="margin-top:28px"><button class="btn btn-dark" onclick="bkPrev(4)"><span>← Back</span></button><button class="btn btn-gold" onclick="bkNext(4)"><span>Confirm Booking →</span></button></div>
+      </div>
+    </div>
+    <div class="bk-sidebar">
+      <div class="bk-sum">
+        <img id="BK-IMG" class="bk-sum-img" src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=500&q=70" alt="Room">
+        <div class="bk-sum-room" id="BK-ROOM">Royal Penthouse Suite</div>
+        <div class="bk-sum-loc">📍 Monaco, MC</div>
+        <div class="bk-sum-row"><span>Per Night</span><span id="BK-PN">$1,200</span></div>
+        <div class="bk-sum-row"><span>Nights</span><span id="BK-N">3</span></div>
+        <div class="bk-sum-row"><span>Subtotal</span><span id="BK-SUB">$3,600</span></div>
+        <div class="bk-sum-row"><span>Tax (12%)</span><span id="BK-TAX">$432</span></div>
+        <div class="bk-sum-row"><span>Resort Fee</span><span>$95</span></div>
+        <div class="bk-sum-total"><span>Total</span><span id="BK-TOT">$4,127</span></div>
+        <div style="margin-top:12px;font-size:11px;color:var(--muted);text-align:center;padding:12px;border:1px solid var(--border2)">Free cancellation up to 48h before arrival</div>
+      </div>
+      <!-- Palette -->
+      <div class="palette-widget">
+        <div class="pw-title">Design Palette</div>
+        <div class="pw-swatches">
+          <div class="pw-swatch" style="background:#0a0908" onclick="copyColor('#0a0908')"><div class="pw-swatch-tip">#0a0908 — Midnight</div></div>
+          <div class="pw-swatch" style="background:#1e1b14" onclick="copyColor('#1e1b14')"><div class="pw-swatch-tip">#1e1b14 — Surface</div></div>
+          <div class="pw-swatch" style="background:#504840" onclick="copyColor('#504840')"><div class="pw-swatch-tip">#504840 — Muted</div></div>
+          <div class="pw-swatch" style="background:#c49b41" onclick="copyColor('#c49b41')"><div class="pw-swatch-tip">#c49b41 — Gold</div></div>
+          <div class="pw-swatch" style="background:#e8c97a" onclick="copyColor('#e8c97a')"><div class="pw-swatch-tip">#e8c97a — Gold Light</div></div>
+          <div class="pw-swatch" style="background:#f0e9d8" onclick="copyColor('#f0e9d8')"><div class="pw-swatch-tip">#f0e9d8 — Cream</div></div>
+          <div class="pw-swatch" style="background:#2a4030" onclick="copyColor('#2a4030')"><div class="pw-swatch-tip">#2a4030 — Forest</div></div>
+        </div>
+        <div class="pw-labels"><div class="pw-label">Night</div><div class="pw-label">Surface</div><div class="pw-label">Muted</div><div class="pw-label">Gold</div><div class="pw-label">G.Light</div><div class="pw-label">Cream</div><div class="pw-label">Forest</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- Confirm -->
+<div class="confirm-modal" id="CONF">
+  <div class="confirm-box">
+    <div class="confirm-icon">✨</div>
+    <h2 class="confirm-title">Reservation Confirmed</h2>
+    <p class="confirm-text">"Your sanctuary awaits. We look forward to welcoming you and crafting memories that will last a lifetime."</p>
+    <div class="confirm-ref" id="CONF-REF">Reference: #AG-000000</div>
+    <button class="btn btn-gold" style="margin:0 auto;display:flex" onclick="closeConf()"><span>Return to Home →</span></button>
+  </div>
+</div>
+ 
+<!-- ═══════════════════════════════════════════════════
+     PAGE 4 — AMENITIES
+═══════════════════════════════════════════════════ -->
+<div class="page" id="page-amenities">
+  <div class="page-hero"><div class="rv"><div class="s-eyebrow">World-Class Services</div><h1 class="s-title" style="margin-top:10px">Every Luxury <em>Imaginable</em></h1><p class="s-sub">From Michelin starred dining to rooftop infinity pools — each desire anticipated.</p></div></div>
+  <div class="amen-tabs">
+    <button class="atab on" onclick="filterA('all',this)">All Amenities</button>
+    <button class="atab" onclick="filterA('dining',this)">Dining</button>
+    <button class="atab" onclick="filterA('wellness',this)">Wellness</button>
+    <button class="atab" onclick="filterA('sport',this)">Sport</button>
+    <button class="atab" onclick="filterA('service',this)">Services</button>
+    <button class="atab" onclick="filterA('events',this)">Events</button>
+  </div>
+  <section class="section"><div class="amen-grid" id="AGRID"></div></section>
+  <div class="spa-showcase">
+    <div class="spa-show-img"><img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=700&q=70" alt="Spa"><div class="spa-show-img-overlay"></div></div>
+    <div class="spa-show-content rv">
+      <div class="s-eyebrow">Signature Treatment</div>
+      <h2 class="s-title" style="font-size:clamp(30px,3vw,50px);margin-top:10px">The <em>AurumSpa</em> Ritual</h2>
+      <p class="s-sub" style="margin-top:14px">Our 3-hour signature journey through ancient healing traditions and modern wellness. Utterly transformative.</p>
+      <div class="spa-treats">
+        <div class="spa-treat"><span class="spa-treat-n">Royal Gold Infusion Massage</span><span class="spa-treat-p">$380</span></div>
+        <div class="spa-treat"><span class="spa-treat-n">Hammam & Argan Ritual</span><span class="spa-treat-p">$290</span></div>
+        <div class="spa-treat"><span class="spa-treat-n">Diamond Facial by La Mer</span><span class="spa-treat-p">$450</span></div>
+        <div class="spa-treat"><span class="spa-treat-n">Full Day Wellness Journey</span><span class="spa-treat-p">$980</span></div>
+      </div>
+      <button class="btn btn-gold" style="margin-top:28px" onclick="goPage('booking')"><span>Book a Treatment →</span></button>
+    </div>
+  </div>
+</div>
+ 
+<!-- ═══════════════════════════════════════════════════
+     PAGE 5 — GALLERY
+═══════════════════════════════════════════════════ -->
+<div class="page" id="page-gallery">
+  <div class="page-hero"><div class="rv"><div class="s-eyebrow">Visual Journey</div><h1 class="s-title" style="margin-top:10px">The Aurum <em>Gallery</em></h1><p class="s-sub">A curated visual collection of spaces, moments, and experiences.</p></div></div>
+  <div class="gallery-filters">
+    <button class="filt on" onclick="filterG('all',this)">All</button>
+    <button class="filt" onclick="filterG('rooms',this)">Rooms</button>
+    <button class="filt" onclick="filterG('dining',this)">Dining</button>
+    <button class="filt" onclick="filterG('spa',this)">Spa</button>
+    <button class="filt" onclick="filterG('exteriors',this)">Exteriors</button>
+  </div>
+  <div class="gallery-grid" id="GGRID"></div>
+</div>
+ 
+<!-- Lightbox -->
+<div class="gallery-lightbox" id="LB" onclick="closeLB()">
+  <button class="gl-close" onclick="closeLB()">✕</button>
+  <button class="gl-prev" onclick="event.stopPropagation();lbPrev()">‹</button>
+  <img id="LB-IMG" src="" alt="Gallery">
+  <button class="gl-next" onclick="event.stopPropagation();lbNext()">›</button>
+</div>
+ 
+<!-- ═══════════════════════════════════════════════════
+     PAGE 6 — DINING
+═══════════════════════════════════════════════════ -->
+<div class="page" id="page-dining">
+  <div class="page-hero"><div class="rv"><div class="s-eyebrow">Culinary Excellence</div><h1 class="s-title" style="margin-top:10px">The Art of <em>Dining</em></h1><p class="s-sub">Five Michelin stars across three restaurants. Each meal a choreographed performance.</p></div></div>
+  <div class="dining-grid">
+    <div class="dining-card rv">
+      <div class="dc-img"><img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=70" alt="La Terrasse"></div>
+      <div class="dc-content"><div class="dc-stars">★★★</div><div class="tag">Michelin 3-Star</div><div class="dc-name">La Terrasse</div><p class="dc-desc">Three Michelin stars. Seasonal tasting menus designed by Chef Laurent Dubois with produce sourced from our private garden and hand-selected artisan partners.</p><div class="dc-hours">Open: Daily 6:30PM – 10:30PM</div><button class="btn btn-gold" style="margin-top:20px" onclick="goPage('booking')"><span>Reserve a Table →</span></button></div>
+    </div>
+    <div class="dining-card rv d2">
+      <div class="dc-img"><img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500&q=70" alt="The Morning Room"></div>
+      <div class="dc-content"><div class="dc-stars">★★</div><div class="tag">Michelin 2-Star</div><div class="dc-name">The Morning Room</div><p class="dc-desc">Sunlit and serene, a brasserie of exceptional quality. Bespoke breakfasts, specialty coffees, and light lunches overlooking the private gardens.</p><div class="dc-hours">Open: Daily 7:00AM – 3:00PM</div><button class="btn btn-gold" style="margin-top:20px" onclick="goPage('booking')"><span>Reserve a Table →</span></button></div>
+    </div>
+    <div class="dining-card rv d3">
+      <div class="dc-img"><img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=500&q=70" alt="Amber Bar"></div>
+      <div class="dc-content"><div class="dc-stars">★</div><div class="tag">Award-Winning Bar</div><div class="dc-name">Amber Rooftop Bar</div><p class="dc-desc">Above the city skyline, award-winning mixologists craft bespoke cocktail journeys. The perfect setting to begin — or end — a perfect evening.</p><div class="dc-hours">Open: Daily 5:00PM – 2:00AM</div><button class="btn btn-gold" style="margin-top:20px" onclick="showToast('Bar reservations: +1 800 AURUM')"><span>Reserve a Table →</span></button></div>
+    </div>
+    <div class="dining-card rv d4">
+      <div class="dc-img"><img src="https://images.unsplash.com/photo-1543007630-9710e4a00a20?w=500&q=70" alt="The Cellar"></div>
+      <div class="dc-content"><div class="dc-stars">◆◆◆</div><div class="tag">Private Cellar</div><div class="dc-name">The Cellar</div><p class="dc-desc">Over 2,400 labels spanning six continents. Our sommelier team crafts intimate tastings and bespoke pairings in a subterranean sanctuary of wine culture.</p><div class="dc-hours">Open: By appointment</div><button class="btn btn-gold" style="margin-top:20px" onclick="showToast('Cellar sessions: hello@aurumgrand.com')"><span>Request a Tasting →</span></button></div>
+    </div>
+  </div>
+  <div class="menu-section">
+    <div class="rv" style="text-align:center"><div class="s-eyebrow" style="text-align:center">La Terrasse</div><h2 class="s-title" style="text-align:center">Tasting <em>Menu</em></h2><div class="line c"></div></div>
+    <div class="menu-grid">
+      <div class="menu-cat rv d1">
+        <div class="menu-cat-title">Amuse-Bouche & Starters</div>
+        <div class="menu-item"><div><div class="mi-name">Gold Leaf Oyster</div><div class="mi-desc">Champagne mignonette, caviar, sea foam</div></div><div class="mi-price">$68</div></div>
+        <div class="menu-item"><div><div class="mi-name">Truffle Risotto</div><div class="mi-desc">24-month Parmigiano, black truffle, aged butter</div></div><div class="mi-price">$84</div></div>
+        <div class="menu-item"><div><div class="mi-name">Duck Foie Gras</div><div class="mi-desc">Sauternes jelly, brioche, micro herbs</div></div><div class="mi-price">$96</div></div>
+        <div class="menu-item"><div><div class="mi-name">Sea Urchin Cappellini</div><div class="mi-desc">Lemon butter, bottarga, chive oil</div></div><div class="mi-price">$78</div></div>
+      </div>
+      <div class="menu-cat rv d2">
+        <div class="menu-cat-title">Mains & Desserts</div>
+        <div class="menu-item"><div><div class="mi-name">A5 Wagyu Tenderloin</div><div class="mi-desc">Bone marrow jus, roasted garlic, heritage veg</div></div><div class="mi-price">$240</div></div>
+        <div class="menu-item"><div><div class="mi-name">Whole Dover Sole</div><div class="mi-desc">Brown butter, capers, champagne beurre blanc</div></div><div class="mi-price">$180</div></div>
+        <div class="menu-item"><div><div class="mi-name">Valrhona Chocolate Sphere</div><div class="mi-desc">Liquid caramel core, gold leaf, raspberry sorbet</div></div><div class="mi-price">$52</div></div>
+        <div class="menu-item"><div><div class="mi-name">7-Course Tasting Menu</div><div class="mi-desc">With optional wine pairing by our sommelier</div></div><div class="mi-price">$380</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+ 
+<!-- ═══════════════════════════════════════════════════
+     PAGE 7 — EVENTS
+═══════════════════════════════════════════════════ -->
+<div class="page" id="page-events">
+  <div class="events-hero-grid">
+    <div class="events-hero-content"><div class="rv"><div class="s-eyebrow">Celebrations & Gatherings</div><h1 class="s-title" style="margin-top:10px">Moments That <em>Endure</em></h1><p class="s-sub">From intimate anniversaries to 400-person galas — every event crafted to perfection by our dedicated team.</p><button class="btn btn-gold" style="margin-top:32px" onclick="document.getElementById('ev-form').scrollIntoView({behavior:'smooth'})"><span>Request a Proposal →</span></button></div></div>
+    <div class="events-hero-img"><img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800&q=70" alt="Events"></div>
+  </div>
+  <section class="section">
+    <div class="rv"><div class="s-eyebrow">Venues</div><h2 class="s-title">Our Event <em>Spaces</em></h2></div>
+    <div class="venues-grid">
+      <div class="venue-card rv d1"><img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=500&q=70" alt="Ballroom"><div class="venue-body"><div class="tag filled" style="margin-bottom:12px">Grand Ballroom</div><div class="venue-name">The Grand Ballroom</div><p style="font-size:13px;color:var(--muted);line-height:1.65;margin-top:8px">400-person capacity with 9m ceilings, Baccarat crystal chandeliers, and a private terrace. The ultimate backdrop for extraordinary celebrations.</p><div class="venue-specs"><span class="venue-spec">👥 Up to 400</span><span class="venue-spec">📐 1,200m²</span><span class="venue-spec">🎭 Banquet / Theatre</span></div></div></div>
+      <div class="venue-card rv d2"><img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=500&q=70" alt="Garden"><div class="venue-body"><div class="tag filled" style="margin-bottom:12px">Outdoor</div><div class="venue-name">Garden Terrace</div><p style="font-size:13px;color:var(--muted);line-height:1.65;margin-top:8px">Al fresco dining and ceremonies surrounded by curated gardens. The most romantic setting for weddings and intimate celebrations under the stars.</p><div class="venue-specs"><span class="venue-spec">👥 Up to 200</span><span class="venue-spec">📐 800m²</span><span class="venue-spec">🌿 Garden / Outdoor</span></div></div></div>
+      <div class="venue-card rv d3"><img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=500&q=70" alt="Boardroom"><div class="venue-body"><div class="tag filled" style="margin-bottom:12px">Corporate</div><div class="venue-name">The Boardroom</div><p style="font-size:13px;color:var(--muted);line-height:1.65;margin-top:8px">State-of-the-art meeting facilities for 8–40 people. Discreet, technologically advanced, and perfectly appointed for high-level gatherings.</p><div class="venue-specs"><span class="venue-spec">👥 Up to 40</span><span class="venue-spec">📐 120m²</span><span class="venue-spec">💼 Corporate</span></div></div></div>
+    </div>
+    <div class="events-form" id="ev-form">
+      <div class="ev-form-title">Request an Event Proposal</div>
+      <div class="form-grid">
+        <div class="fg"><label>Name</label><input type="text" placeholder="Your name" id="ev-name"></div>
+        <div class="fg"><label>Email</label><input type="email" placeholder="you@email.com" id="ev-email"></div>
+        <div class="fg"><label>Event Type</label><select><option>Wedding & Ceremony</option><option>Corporate Gala</option><option>Birthday Celebration</option><option>Product Launch</option><option>Conference</option><option>Private Dinner</option></select></div>
+        <div class="fg"><label>Estimated Guests</label><select><option>Under 20</option><option>20–50</option><option>50–100</option><option>100–200</option><option>200–400</option><option>400+</option></select></div>
+        <div class="fg"><label>Preferred Date</label><input type="date" id="ev-date"></div>
+        <div class="fg"><label>Budget Range</label><select><option>$5,000 – $20,000</option><option>$20,000 – $50,000</option><option>$50,000 – $100,000</option><option>$100,000+</option></select></div>
+        <div class="fg full"><label>Tell Us About Your Vision</label><textarea placeholder="Describe your dream event — we will make it a reality…" id="ev-msg" style="min-height:110px"></textarea></div>
+      </div>
+      <button class="btn btn-gold" style="margin-top:24px" onclick="submitEvent()"><span>Send Proposal Request →</span></button>
+    </div>
+  </section>
+</div>
+ 
+<!-- ═══════════════════════════════════════════════════
+     PAGE 8 — ABOUT
+═══════════════════════════════════════════════════ -->
+<div class="page" id="page-about">
+  <div class="about-split">
+    <div class="about-img"><img src="https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&q=70" alt="Aurum Grand History"></div>
+    <div class="about-content rv">
+      <div class="s-eyebrow">Est. 1997</div>
+      <h2 class="s-title" style="margin-top:10px">A Legacy of <em>Excellence</em></h2>
+      <div class="line"></div>
+      <p style="font-family:var(--font-display);font-size:18px;font-style:italic;font-weight:300;color:var(--muted);line-height:1.75">What began as a single property in Monaco has become the world's most admired collection of luxury hotels — built on an uncompromising belief that hospitality is, above all, an art form.</p>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-year">1997</div><div class="tl-dot"></div><div><div class="tl-t">The First Property Opens</div><div class="tl-d">Our Monaco flagship sets a new benchmark for Mediterranean luxury and intimate service.</div></div></div>
+        <div class="tl-item"><div class="tl-year">2004</div><div class="tl-dot"></div><div><div class="tl-t">First Michelin Star Awarded</div><div class="tl-d">La Terrasse receives its first star — a validation of an extraordinary culinary vision.</div></div></div>
+        <div class="tl-item"><div class="tl-year">2011</div><div class="tl-dot"></div><div><div class="tl-t">Global Collection Expands</div><div class="tl-d">Properties open in Dubai, Santorini, Bali, and the Maldives — each deeply local in character.</div></div></div>
+        <div class="tl-item"><div class="tl-year">2020</div><div class="tl-dot"></div><div><div class="tl-t">Carbon Neutral</div><div class="tl-d">First luxury hotel group to achieve global carbon neutrality — luxury with a conscience.</div></div></div>
+        <div class="tl-item"><div class="tl-year">2025</div><div class="tl-dot"></div><div><div class="tl-t">Future Unfolds</div><div class="tl-d">Three new properties under development. The Aurum story continues, ever forward.</div></div></div>
+      </div>
+    </div>
+  </div>
+  <section class="section" style="background:var(--bg2)">
+    <div class="rv" style="text-align:center"><div class="s-eyebrow" style="text-align:center">Leadership</div><h2 class="s-title" style="text-align:center">The <em>Visionaries</em></h2></div>
+    <div class="team-grid" style="margin-top:56px">
+      <div class="team-card rv d1"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=70" alt="CEO"><div class="team-body"><div class="team-name">Alexandre Moreau</div><div class="team-role">Founder & Chairman</div><p class="team-bio">Visionary who transformed a single Monaco property into the world's most coveted hotel brand over three decades of uncompromising pursuit of excellence.</p></div></div>
+      <div class="team-card rv d2"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=70" alt="CEO"><div class="team-body"><div class="team-name">Elena Vasquez</div><div class="team-role">Chief Executive Officer</div><p class="team-bio">Twenty years leading luxury hospitality with an iron commitment to guest experience, people culture, and sustainable growth.</p></div></div>
+      <div class="team-card rv d3"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=70" alt="Chef"><div class="team-body"><div class="team-name">Laurent Dubois</div><div class="team-role">Executive Chef</div><p class="team-bio">Holder of five Michelin stars. Laurent's philosophy is simple: every dish is a story, every ingredient a character, every meal a memory.</p></div></div>
+      <div class="team-card rv d4"><img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=400&q=70" alt="Design"><div class="team-body"><div class="team-name">Aiko Tanaka</div><div class="team-role">Chief Design Officer</div><p class="team-bio">Award-winning designer who created the visual language and spatial philosophy that defines every Aurum Grand property worldwide.</p></div></div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="rv" style="text-align:center"><div class="s-eyebrow" style="text-align:center">Recognition</div><h2 class="s-title" style="text-align:center">Our <em>Awards</em></h2><div class="line c"></div></div>
+    <div class="awards-row">
+      <div class="award-card rv d1"><div class="award-ico">🏆</div><div class="award-name">World's Best Hotel</div><div class="award-org">Travel + Leisure 2024</div></div>
+      <div class="award-card rv d2"><div class="award-ico">⭐</div><div class="award-name">5 Michelin Stars</div><div class="award-org">Michelin Guide 2024</div></div>
+      <div class="award-card rv d3"><div class="award-ico">🌿</div><div class="award-name">Green Champion</div><div class="award-org">TripAdvisor 2024</div></div>
+      <div class="award-card rv d4"><div class="award-ico">💎</div><div class="award-name">Forbes 5-Star</div><div class="award-org">Forbes Travel Guide</div></div>
+      <div class="award-card rv d5"><div class="award-ico">🎖️</div><div class="award-name">Best Luxury Brand</div><div class="award-org">Condé Nast 2023</div></div>
+    </div>
+  </section>
+</div>
+ 
+<!-- ═══════════════════════════════════════════════════
+     PAGE 9 — LOYALTY
+═══════════════════════════════════════════════════ -->
+<div class="page" id="page-loyalty">
+  <div class="loyalty-hero">
+    <div class="rv" style="position:relative;z-index:1"><div class="s-eyebrow">Aurum Circle</div><h1 class="s-title" style="margin-top:10px">Loyalty <em>Reimagined</em></h1><p class="s-sub">Four tiers of extraordinary privilege. The more you explore, the more we celebrate you.</p></div>
+  </div>
+  <section class="section">
+    <div class="rv" style="text-align:center"><div class="s-eyebrow" style="text-align:center">Membership Tiers</div><h2 class="s-title" style="text-align:center">Choose Your <em>Level</em></h2></div>
+    <div class="tiers-grid" style="margin-top:56px">
+      <div class="tier-card rv d1"><div class="tier-ico">🥉</div><div class="tier-name">Aurum</div><div class="tier-desc">Begin your journey</div><div class="tier-price">Free</div><div class="tier-price-s">No annual fee</div><ul class="tier-perks"><li>5% discount on rooms</li><li>Priority reservations</li><li>Welcome gift on arrival</li><li>Digital concierge access</li></ul><button class="btn btn-outline" onclick="showToast('Aurum membership registered!')"><span>Join Free →</span></button></div>
+      <div class="tier-card rv d2"><div class="tier-ico">🥈</div><div class="tier-name">Silver</div><div class="tier-desc">The discerning traveller</div><div class="tier-price">$180</div><div class="tier-price-s">per year</div><ul class="tier-perks"><li>10% discount on all stays</li><li>Guaranteed room upgrades</li><li>Early check-in 11AM</li><li>Complimentary minibar</li><li>Spa credit $100/stay</li></ul><button class="btn btn-outline" onclick="showToast('Silver membership activated!')"><span>Join Silver →</span></button></div>
+      <div class="tier-card featured rv d3"><div class="tier-ico">🥇</div><div class="tier-name">Gold</div><div class="tier-desc">Elevated in every way</div><div class="tier-price">$480</div><div class="tier-price-s">per year</div><ul class="tier-perks"><li>20% discount on all stays</li><li>Suite upgrades when available</li><li>Flexible check-in/out</li><li>Daily breakfast included</li><li>$300 spa credit per stay</li><li>Personal butler on request</li></ul><button class="btn btn-dark" onclick="showToast('Gold membership — our most popular!')"><span>Join Gold →</span></button></div>
+      <div class="tier-card rv d4"><div class="tier-ico">💎</div><div class="tier-name">Diamond</div><div class="tier-desc">The ultimate privilege</div><div class="tier-price">By Invitation</div><div class="tier-price-s">Exclusive access</div><ul class="tier-perks"><li>30% lifetime discount</li><li>Permanent suite preference</li><li>Dedicated relationship manager</li><li>Unlimited helicopter transfers</li><li>Unlimited spa access</li><li>Invitations to private events</li></ul><button class="btn btn-outline" onclick="showToast('Diamond tier: contact your concierge')"><span>Enquire →</span></button></div>
+    </div>
+  </section>
+  <section class="section" style="background:var(--bg2)">
+    <div class="rv"><div class="s-eyebrow">Membership Benefits</div><h2 class="s-title">Privileges <em>Beyond</em> Expectation</h2></div>
+    <div class="benefits-grid">
+      <div class="benefit-card rv d1"><div class="benefit-ico">🎁</div><div class="benefit-title">Birthday Rewards</div><p class="benefit-desc">Exclusive birthday upgrades and complimentary dining credits. We celebrate you the way you deserve.</p></div>
+      <div class="benefit-card rv d2"><div class="benefit-ico">📱</div><div class="benefit-title">Digital Concierge App</div><p class="benefit-desc">Manage your entire stay from your phone — reservations, spa, room service, and butler — all at your fingertips.</p></div>
+      <div class="benefit-card rv d3"><div class="benefit-ico">🌐</div><div class="benefit-title">Global Access</div><p class="benefit-desc">Your membership works across all 44 Aurum Grand properties worldwide. One family, infinite destinations.</p></div>
+      <div class="benefit-card rv d4"><div class="benefit-ico">🍷</div><div class="benefit-title">Cellar Club</div><p class="benefit-desc">Gold and Diamond members receive exclusive access to private wine tastings, dinners, and cellar auctions.</p></div>
+      <div class="benefit-card rv d5"><div class="benefit-ico">✈️</div><div class="benefit-title">Travel Partnerships</div><p class="benefit-desc">Earn and redeem points with over 30 premium airline and lifestyle partners. Points that never expire.</p></div>
+      <div class="benefit-card rv d1"><div class="benefit-ico">🎭</div><div class="benefit-title">Exclusive Events</div><p class="benefit-desc">Invitations to members-only galas, art previews, wine tastings, and cultural experiences around the world.</p></div>
+    </div>
+  </section>
+</div>
+ 
+<!-- ═══════════════════════════════════════════════════
+     PAGE 10 — CONTACT
+═══════════════════════════════════════════════════ -->
+<div class="page" id="page-contact">
+  <div class="page-hero"><div class="rv"><div class="s-eyebrow">Reach Us</div><h1 class="s-title" style="margin-top:10px">Always <em>Here</em> For You</h1><p class="s-sub">Every inquiry is a privilege. Our team responds within two hours, around the clock.</p></div></div>
+  <div class="contact-grid">
+    <div class="contact-form-side rv">
+      <div style="font-family:var(--font-display);font-size:28px;font-weight:600;color:var(--ivory);margin-bottom:32px">Send Us a Message</div>
+      <div class="form-grid">
+        <div class="fg"><label>First Name</label><input type="text" placeholder="Your first name" id="cf-fn"></div>
+        <div class="fg"><label>Last Name</label><input type="text" placeholder="Your last name" id="cf-ln"></div>
+        <div class="fg"><label>Email</label><input type="email" placeholder="you@email.com" id="cf-em"></div>
+        <div class="fg"><label>Phone</label><input type="tel" placeholder="+1 555 000 0000" id="cf-ph"></div>
+        <div class="fg full"><label>Subject</label><select id="cf-sub"><option>Reservation Inquiry</option><option>Special Occasion</option><option>Corporate Events</option><option>Spa & Wellness</option><option>Loyalty Programme</option><option>Press & Media</option><option>Feedback</option><option>Other</option></select></div>
+        <div class="fg full"><label>Message</label><textarea placeholder="Tell us how we can help you…" id="cf-msg" style="min-height:130px"></textarea></div>
+      </div>
+      <button class="btn btn-gold" style="margin-top:24px" onclick="sendContact()"><span>Send Message →</span></button>
+    </div>
+    <div class="contact-info-side rv d2">
+      <div class="s-eyebrow">Contact Details</div>
+      <h2 class="s-title" style="font-size:28px;margin-top:8px">Find <em>Us</em></h2>
+      <div class="ci-items">
+        <div class="ci-item"><div class="ci-ico">📍</div><div><div class="ci-lbl">Headquarters</div><div class="ci-val">1 Grandeur Boulevard<br>Monaco, MC 98000</div></div></div>
+        <div class="ci-item"><div class="ci-ico">📞</div><div><div class="ci-lbl">Phone</div><div class="ci-val">+1 800 AURUM GRAND</div><div class="ci-sub">24 hours · 7 days</div></div></div>
+        <div class="ci-item"><div class="ci-ico">✉️</div><div><div class="ci-lbl">Email</div><div class="ci-val">hello@aurumgrand.com</div><div class="ci-sub">Response within 2 hours</div></div></div>
+        <div class="ci-item"><div class="ci-ico">🕐</div><div><div class="ci-lbl">Concierge</div><div class="ci-val">24 / 7 / 365</div><div class="ci-sub">No detail too small, no request too grand</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div style="padding:0 64px">
+    <div class="map-block">
+      <div class="map-bg-lines"></div>
+      <div class="map-pin-wrap">
+        <div class="map-pin-ico"><span>🏨</span></div>
+        <div class="map-pin-label">Aurum Grand — Monaco HQ</div>
+      </div>
+    </div>
+  </div>
+  <section class="section" style="background:var(--bg2)">
+    <div class="rv" style="text-align:center"><div class="s-eyebrow" style="text-align:center">FAQ</div><h2 class="s-title" style="text-align:center">Quick <em>Answers</em></h2></div>
+    <div class="faq-grid" id="FGRID" style="margin-top:56px"></div>
+  </section>
+</div>
+ 
+<!-- ═══════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand rv">
+      <div class="footer-logo">AURUM<span>GRAND</span></div>
+      <p class="footer-tagline">"Where every stay is a story worth telling, and every guest a lifelong member of our family."</p>
+      <div class="footer-socials"><div class="fsoc">𝕏</div><div class="fsoc">f</div><div class="fsoc">in</div><div class="fsoc">ig</div><div class="fsoc">▶</div></div>
+      <div class="footer-newsletter">
+        <div class="fn-label">Newsletter</div>
+        <div class="fn-form"><input class="fn-input" type="email" placeholder="Your email address"><button class="fn-btn" onclick="showToast('✦ You are now subscribed!')">Subscribe</button></div>
+      </div>
+    </div>
+    <div class="footer-col rv d1"><h4>Explore</h4><div class="footer-links"><a onclick="goPage('rooms')">Rooms & Suites</a><a onclick="goPage('dining')">Dining</a><a onclick="goPage('amenities')">Amenities</a><a onclick="goPage('gallery')">Gallery</a><a onclick="goPage('events')">Events</a><a onclick="goPage('booking')">Reserve Now</a></div></div>
+    <div class="footer-col rv d2"><h4>Company</h4><div class="footer-links"><a onclick="goPage('about')">Our Story</a><a>Sustainability</a><a>Press & Media</a><a>Careers</a><a onclick="goPage('loyalty')">Loyalty Circle</a><a onclick="goPage('contact')">Contact</a></div></div>
+    <div class="footer-col rv d3"><h4>Support</h4><div class="footer-links"><a>Cancellation Policy</a><a>Privacy Policy</a><a>Terms & Conditions</a><a>Accessibility</a><a>Cookie Settings</a><a>Gift Vouchers</a></div></div>
+  </div>
+  <div class="footer-bottom"><span>© 2025 Aurum Grand International. All rights reserved.</span><span>Crafted with passion · Delivered with precision</span></div>
+</footer>
+ 
+<!-- ═══════════════════════════════════════════════════
+     AI CHATBOT
+═══════════════════════════════════════════════════ -->
+<div class="chat-bubble" id="CBUBBLE" onclick="toggleChat()">
+  <span class="chat-bubble-ico">✦</span>
+  <div class="chat-notification" id="CNOTIF">1</div>
+</div>
+ 
+<div class="chat-panel" id="CPANEL">
+  <div class="chat-head">
+    <div class="chat-head-av">✦</div>
+    <div class="chat-head-info">
+      <div class="chat-head-name">Aria — Aurum Concierge AI</div>
+      <div class="chat-head-status">Online · Powered by Claude</div>
+    </div>
+    <div class="chat-head-btns">
+      <div class="chat-head-btn" onclick="clearChat()" title="Clear chat">↺</div>
+      <div class="chat-head-btn" onclick="toggleChat()" title="Close">✕</div>
+    </div>
+  </div>
+  <div class="chat-msgs" id="CMSGS"></div>
+  <div class="chat-suggestions" id="CSUGS"></div>
+  <div class="chat-input-area">
+    <textarea class="chat-input" id="CINPUT" placeholder="Ask Aria anything…" rows="1" onkeydown="chatKeydown(event)" oninput="autoResize(this)"></textarea>
+    <button class="chat-send" onclick="sendChatMsg()" title="Send">→</button>
+  </div>
+</div>
+ 
+<!-- TOAST -->
+<div class="toast" id="TOAST"><span class="toast-ico">✦</span><span id="TOAST-MSG"></span></div>
+ 
+<!-- ═══════════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════════ -->
+<script>
+// ── CURSOR ─────────────────────────────────────────────
+const CUR=document.getElementById('CUR'),CURR=document.getElementById('CURR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;CUR.style.left=mx+'px';CUR.style.top=my+'px'});
+(function anim(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;CURR.style.left=rx+'px';CURR.style.top=ry+'px';requestAnimationFrame(anim)})();
+document.querySelectorAll('a,button,.room-card,.dest-card,.amen-card,.team-card,.venue-card,.tier-card,.testi-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{CUR.classList.add('big');CURR.classList.add('big')});
+  el.addEventListener('mouseleave',()=>{CUR.classList.remove('big');CURR.classList.remove('big')});
+});
+ 
+// ── NAV ────────────────────────────────────────────────
+const NAV=document.getElementById('NAV');
+const PROG=document.getElementById('PROG');
+window.addEventListener('scroll',()=>{
+  NAV.classList.toggle('solid',window.scrollY>60);
+  const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  PROG.style.width=p+'%';
+});
+ 
+// ── MOBILE NAV ─────────────────────────────────────────
+const BURG=document.getElementById('BURG'),MOBN=document.getElementById('MOBN'),MOBB=document.getElementById('MOBB');
+function toggleMob(){BURG.classList.toggle('open');MOBN.classList.toggle('open');MOBB.classList.toggle('open')}
+function closeMob(){BURG.classList.remove('open');MOBN.classList.remove('open');MOBB.classList.remove('open')}
+ 
+// ── PAGES ──────────────────────────────────────────────
+function goPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-links a[data-page]').forEach(a=>a.classList.toggle('active',a.dataset.page===id));
+  window.scrollTo({top:0,behavior:'smooth'});
+  setTimeout(triggerReveal,80);
+  if(id==='rooms')renderRooms();
+  if(id==='amenities')renderAmen('all');
+  if(id==='gallery')renderGallery('all');
+  if(id==='contact')renderFAQ();
+}
+ 
+// ── REVEAL ─────────────────────────────────────────────
+function triggerReveal(){
+  const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')})},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.rv:not(.in),.rv-l:not(.in),.rv-r:not(.in)').forEach(el=>io.observe(el));
+}
+triggerReveal();
+ 
+// ── COUNTERS ───────────────────────────────────────────
+function animCount(el,target,suf=''){
+  const dur=1900,start=performance.now();
+  (function tick(now){
+    const p=Math.min((now-start)/dur,1),e=1-Math.pow(1-p,4);
+    el.textContent=Math.floor(e*target)+suf;
+    if(p<1)requestAnimationFrame(tick);
+  })(start);
+}
+setTimeout(()=>{
+  animCount(document.getElementById('hs1'),148,'+');
+  animCount(document.getElementById('hs2'),44,'+');
+  animCount(document.getElementById('hs3'),68,'+');
+  animCount(document.getElementById('hs4'),28,'+');
+},1400);
+ 
+// ── DATES ──────────────────────────────────────────────
+const fmtD=d=>d.toISOString().split('T')[0];
+const t=new Date(),d1=new Date(t),d2=new Date(t);
+d1.setDate(t.getDate()+1);d2.setDate(t.getDate()+4);
+['h-in','bk1-in','RD-IN'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=fmtD(d1)});
+['h-out','bk1-out','RD-OUT'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=fmtD(d2)});
+ 
+// ── COUNTDOWN ──────────────────────────────────────────
+let cdEnd=new Date();cdEnd.setDate(cdEnd.getDate()+14);cdEnd.setHours(9,32,0);
+function updCD(){
+  const diff=Math.max(0,cdEnd-new Date());
+  const pad=n=>String(n).padStart(2,'0');
+  const g=id=>document.getElementById(id);
+  if(g('cd-d')){g('cd-d').textContent=pad(Math.floor(diff/86400000));g('cd-h').textContent=pad(Math.floor(diff%86400000/3600000));g('cd-m').textContent=pad(Math.floor(diff%3600000/60000));g('cd-s').textContent=pad(Math.floor(diff%60000/1000))}
+}
+updCD();setInterval(updCD,1000);
+ 
+// ── TOAST ──────────────────────────────────────────────
+let toastTm;
+function showToast(msg){
+  const t=document.getElementById('TOAST');
+  document.getElementById('TOAST-MSG').textContent=msg;
+  t.classList.add('show');
+  clearTimeout(toastTm);
+  toastTm=setTimeout(()=>t.classList.remove('show'),4500);
+}
+ 
+// ── SEARCH ─────────────────────────────────────────────
+function homeSearch(){
+  const d=document.getElementById('h-dest').value||'our destinations';
+  showToast(`Searching premium rooms in ${d}…`);
+  setTimeout(()=>goPage('rooms'),900);
+}
+ 
+// ── ROOMS DATA ─────────────────────────────────────────
+const ROOMS=[
+  {id:1,name:'Classic Elegance',type:'classic',price:220,rating:4.7,rev:312,size:'42m²',bed:'King',view:'Garden',guests:2,img:'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600&q=70',img2:'https://images.unsplash.com/photo-1615874959474-d609969a20ed?w=400&q=70',desc:'A harmonious blend of timeless elegance and contemporary comfort. Refined furnishings, plush bedding, marble bathroom.',feats:['King-size bed','Marble bathroom','Minibar','Smart TV','Rain shower','Butler bell','Room service','Wi-Fi 1Gbps'],tag:'Classic'},
+  {id:2,name:'Skyline Deluxe',type:'deluxe',price:320,rating:4.8,rev:244,size:'58m²',bed:'King',view:'City Panorama',guests:2,img:'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&q=70',img2:'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&q=70',desc:'Floor-to-ceiling windows frame spectacular city panoramas. Award-winning interiors, separate lounge area, Nespresso.',feats:['Floor-to-ceiling windows','King-size bed','Separate lounge','Walk-in wardrobe','Premium minibar','Nespresso','Marble bathroom','Butler service'],tag:'Deluxe'},
+  {id:3,name:'Garden View Suite',type:'suite',price:480,rating:4.9,rev:189,size:'78m²',bed:'King',view:'Garden & Pool',guests:3,img:'https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=600&q=70',img2:'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=400&q=70',desc:'Step onto your private terrace and breathe in curated garden fragrances. Tranquility of nature with every luxury.',feats:['Private terrace','Garden views','Living room','Soaking tub','Walk-in wardrobe','Dual vanity','Afternoon tea','Pillow menu'],tag:'Suite'},
+  {id:4,name:'Ocean Horizon Suite',type:'suite',price:680,rating:4.9,rev:156,size:'95m²',bed:'King',view:'Full Ocean',guests:3,img:'https://images.unsplash.com/photo-1540541338287-41700207dee6?w=600&q=70',img2:'https://images.unsplash.com/photo-1560347876-aeef00ee58a1?w=400&q=70',desc:'Wake to the sound of waves and an endless horizon. Immersive coastal experience with terrace jacuzzi and ocean art.',feats:['Ocean views','Private balcony','Terrace jacuzzi','Separate bedroom','Living & dining','Daily champagne','Bose system','Dedicated butler'],tag:'Suite'},
+  {id:5,name:'Royal Penthouse',type:'suite',price:1200,rating:5.0,rev:98,size:'250m²',bed:'King + 2 Queens',view:'360° Panorama',guests:6,img:'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=70',img2:'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=400&q=70',desc:'The pinnacle of luxury. Entire top floor. 360° panoramic views, private pool, cinema, personal chef on request.',feats:['360° panorama','Private rooftop pool','Home cinema','3 bedrooms','Gourmet kitchen','Private gym','Personal chef','Helicopter transfers'],tag:'✦ Penthouse'},
+  {id:6,name:'Infinity Pool Villa',type:'villa',price:2800,rating:5.0,rev:64,size:'480m²',bed:'3 King Bedrooms',view:'Ocean & Garden',guests:8,img:'https://images.unsplash.com/photo-1602002418816-5c0aeef426aa?w=600&q=70',img2:'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&q=70',desc:'Your private paradise. Secluded villa with infinity pool, private beach, dedicated team, and total privacy.',feats:['Infinity pool','3 master bedrooms','Open-plan living','Outdoor dining','Private beach','Dedicated team','Chef & sommelier','Daily spa'],tag:'✦ Villa'},
+];
+ 
+let rFilter='all',rSort='f';
+function renderRooms(){
+  const grid=document.getElementById('RGRID');
+  if(!grid)return;
+  let data=rFilter==='all'?[...ROOMS]:ROOMS.filter(r=>r.type===rFilter);
+  if(rSort==='pl')data.sort((a,b)=>a.price-b.price);
+  else if(rSort==='ph')data.sort((a,b)=>b.price-a.price);
+  else if(rSort==='r')data.sort((a,b)=>b.rating-a.rating);
+  else data.sort((a,b)=>a.id-b.id);
+  grid.innerHTML=data.map(r=>`
+    <div class="room-card rv" onclick="openRoom(${r.id})">
+      <div class="rc-img"><img src="${r.img}" alt="${r.name}" loading="lazy"><div class="rc-tag"><span class="tag filled">${r.tag}</span></div><button class="rc-wish" onclick="event.stopPropagation();wishR(this)">♡</button></div>
+      <div class="rc-body">
+        <div class="rc-name">${r.name}</div>
+        <div class="rc-feats">
+          <span class="rc-feat">📐 ${r.size}</span>
+          <span class="rc-feat">🛏 ${r.bed}</span>
+          <span class="rc-feat">🪟 ${r.view}</span>
+          <span class="rc-feat">👥 Up to ${r.guests}</span>
+        </div>
+        <div class="rc-foot">
+          <div><div class="rc-price">$${r.price.toLocaleString()}</div><div class="rc-price-s">per night</div></div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="rc-rating"><strong>★ ${r.rating}</strong> <span>(${r.rev})</span></div>
+            <button class="rc-btn" onclick="event.stopPropagation();bookRoom(${r.id})">Book</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  triggerReveal();
+}
+function filterR(f,btn){rFilter=f;document.querySelectorAll('.filt').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderRooms()}
+function sortR(v){rSort=v;renderRooms()}
+function wishR(btn){btn.classList.toggle('on');btn.textContent=btn.classList.contains('on')?'♥':'♡';showToast(btn.classList.contains('on')?'Added to wishlist ♥':'Removed from wishlist')}
+function openRoom(id){
+  const r=ROOMS.find(x=>x.id===id);if(!r)return;
+  document.getElementById('RD-TAG').innerHTML=`<span class="tag filled">${r.tag}</span>`;
+  document.getElementById('RD-NAME').textContent=r.name;
+  document.getElementById('RD-DESC').textContent=r.desc;
+  document.getElementById('RD-PRICE').textContent='$'+r.price.toLocaleString();
+  document.getElementById('RD-IMGS').innerHTML=`<img src="${r.img}" alt="${r.name}"><img src="${r.img2}" alt="${r.name}">`;
+  document.getElementById('RD-FEATS').innerHTML=r.feats.map(f=>`<div class="rd-feat"><span class="rd-feat-i">✦</span><span>${f}</span></div>`).join('');
+  document.getElementById('RDO').classList.add('open');
+  document.body.style.overflow='hidden';
+  window._activeRoom=r;
+}
+function closeRDO(e){if(e.target===document.getElementById('RDO'))closeRDOBtn()}
+function closeRDOBtn(){document.getElementById('RDO').classList.remove('open');document.body.style.overflow=''}
+function bookFromDetail(){closeRDOBtn();if(window._activeRoom)bookRoom(window._activeRoom.id)}
+function bookRoom(id){
+  const r=ROOMS.find(x=>x.id===id);if(!r)return;
+  document.getElementById('BK-ROOM').textContent=r.name;
+  document.getElementById('BK-PN').textContent='$'+r.price.toLocaleString();
+  document.getElementById('BK-IMG').src=r.img;
+  calcBkSum(r.price);
+  goPage('booking');bkGoStep(1);
+}
+function calcBkSum(p){
+  const inn=document.getElementById('bk1-in')?.value,out=document.getElementById('bk1-out')?.value;
+  const n=Math.max(1,inn&&out?Math.round((new Date(out)-new Date(inn))/86400000):3);
+  const sub=p*n,tax=Math.round(sub*.12),tot=sub+tax+95;
+  document.getElementById('BK-N').textContent=n;
+  document.getElementById('BK-SUB').textContent='$'+sub.toLocaleString();
+  document.getElementById('BK-TAX').textContent='$'+tax.toLocaleString();
+  document.getElementById('BK-TOT').textContent='$'+(tot).toLocaleString();
+}
+function updateBkSummary(){
+  const sel=document.getElementById('bk1-room')?.value;
+  if(!sel)return;
+  const [p,name]=sel.split('|');
+  document.getElementById('BK-ROOM').textContent=name;
+  document.getElementById('BK-PN').textContent='$'+parseInt(p).toLocaleString();
+  calcBkSum(parseInt(p));
+}
+ 
+// ── BOOKING STEPS ──────────────────────────────────────
+let bkStep=1;
+function bkGoStep(s){
+  for(let i=1;i<=4;i++){
+    const f=document.getElementById('BKS'+i),b=document.getElementById('BS'+i);
+    if(f)f.style.display=i===s?'block':'none';
+    if(b){b.classList.toggle('active',i===s);b.classList.toggle('done',i<s)}
+  }
+  bkStep=s;
+}
+function bkNext(s){
+  if(s===1&&!document.getElementById('bk1-room').value){showToast('⚠ Please select a room type');return}
+  if(s===2&&(!document.getElementById('bk2-fn').value||!document.getElementById('bk2-em').value)){showToast('⚠ Please fill in your details');return}
+  if(s===4){
+    const ref='AG-'+Math.random().toString(36).substr(2,8).toUpperCase();
+    document.getElementById('CONF-REF').textContent='Reference: #'+ref;
+    document.getElementById('CONF').classList.add('open');
+    document.body.style.overflow='hidden';
+    return;
+  }
+  bkGoStep(s+1);
+}
+function bkPrev(s){bkGoStep(s-1)}
+function closeConf(){document.getElementById('CONF').classList.remove('open');document.body.style.overflow='';goPage('home');bkGoStep(1)}
+function fmtCard(el){let v=el.value.replace(/\D/g,'').substr(0,16);el.value=v.replace(/(\d{4})/g,'$1 ').trim()}
+function fmtExp(el){let v=el.value.replace(/\D/g,'').substr(0,4);if(v.length>=2)v=v.substr(0,2)+' / '+v.substr(2);el.value=v}
+ 
+// ── PALETTE ────────────────────────────────────────────
+function copyColor(hex){navigator.clipboard.writeText(hex).then(()=>showToast(`Copied ${hex} to clipboard`))}
+ 
+// ── AMENITIES DATA ─────────────────────────────────────
+const AMEN=[
+  {cat:'dining',ico:'🍽️',name:'La Terrasse',desc:'Three Michelin-starred fine dining. Seasonal tasting menus by Chef Laurent Dubois. The finest produce, the most inspired technique.',tag:'Daily from 6:30PM'},
+  {cat:'dining',ico:'☕',name:'The Morning Room',desc:'A sunlit brasserie of exceptional quality. Bespoke breakfasts, artisan coffees, and light lunches overlooking the private gardens.',tag:'7AM – 3PM daily'},
+  {cat:'dining',ico:'🍸',name:'Amber Rooftop Bar',desc:'Award-winning mixologists above the city skyline. Bespoke cocktail journeys inspired by the season and the stars above.',tag:'5PM – 2AM daily'},
+  {cat:'dining',ico:'🍷',name:'The Cellar',desc:'2,400+ labels across six continents. Private tastings and sommelier-led pairings in a subterranean sanctuary of wine culture.',tag:'By appointment'},
+  {cat:'wellness',ico:'💆',name:'AurumSpa',desc:'18 private treatment rooms. La Mer facials, hammam rituals, signature 3-hour healing journeys, and flotation tanks.',tag:'Daily 8AM–10PM'},
+  {cat:'wellness',ico:'🧘',name:'Yoga & Mindfulness',desc:'Daily sunrise yoga on the panoramic terrace. Private mindfulness coaching and bespoke retreat programmes.',tag:'Daily at sunrise'},
+  {cat:'wellness',ico:'🛁',name:'Thermal Circuit',desc:'Indoor-outdoor thermal pools, ice plunge, Finnish sauna, steam room, and flotation in a sanctuary of stillness.',tag:'Daily 7AM–11PM'},
+  {cat:'sport',ico:'🏊',name:'Rooftop Infinity Pool',desc:'Heated infinity pool overlooking the city. Private cabanas, poolside service, and sunset cocktail hour every evening.',tag:'Daily 7AM–10PM'},
+  {cat:'sport',ico:'🏋️',name:'Performance Gym',desc:'State-of-the-art equipment, personal trainers, boxing suite, and altitude training chamber. Open around the clock.',tag:'24 Hours'},
+  {cat:'sport',ico:'🎾',name:'Tennis & Padel Courts',desc:'Two championship courts and two padel courts. Professional coaches for lessons and match play at your disposal.',tag:'Daily 6AM–9PM'},
+  {cat:'service',ico:'🚁',name:'Helicopter Transfers',desc:'Private helicopter from any regional airport to our rooftop helipad. Seamless, scenic, unforgettable arrival.',tag:'On request'},
+  {cat:'service',ico:'🛎️',name:'24h Butler Service',desc:'Your dedicated butler anticipates every need. Wardrobe, reservations, private shopping — handled with discretion.',tag:'Always available'},
+  {cat:'service',ico:'🧺',name:'In-Suite Dining',desc:'Full restaurant menus available in-suite at any hour. Private chef dinners for intimate celebrations or business.',tag:'24 Hours'},
+  {cat:'events',ico:'💍',name:'Weddings',desc:'Three stunning venues — Grand Ballroom, Garden Terrace, Rooftop Pavilion. Bespoke planning from first moment to last.',tag:'By appointment'},
+  {cat:'events',ico:'💼',name:'Corporate',desc:'Six meeting suites, private boardroom, state-of-the-art AV. Dedicated coordinators handle every detail flawlessly.',tag:'By appointment'},
+  {cat:'events',ico:'🎭',name:'Private Galas',desc:'Exclusive venue hire. From intimate soirées to 400-person galas — crafted to reflect your vision, perfectly.',tag:'By appointment'},
+];
+function renderAmen(filter){
+  const grid=document.getElementById('AGRID');if(!grid)return;
+  const data=filter==='all'?AMEN:AMEN.filter(a=>a.cat===filter);
+  grid.innerHTML=data.map(a=>`<div class="amen-card rv"><div class="amen-ico-box">${a.ico}</div><div><div class="amen-name">${a.name}</div><p class="amen-desc">${a.desc}</p><div class="amen-tag-wrap"><span class="tag">${a.tag}</span></div></div></div>`).join('');
+  triggerReveal();
+}
+function filterA(f,btn){document.querySelectorAll('.atab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderAmen(f)}
+ 
+// ── GALLERY ────────────────────────────────────────────
+const GALLERY=[
+  {cat:'rooms',url:'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=70',wide:true,tall:false},
+  {cat:'rooms',url:'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&q=70'},
+  {cat:'rooms',url:'https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=600&q=70'},
+  {cat:'exteriors',url:'https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&q=70',wide:true},
+  {cat:'dining',url:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=70'},
+  {cat:'dining',url:'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=70'},
+  {cat:'spa',url:'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=600&q=70',tall:true},
+  {cat:'rooms',url:'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600&q=70'},
+  {cat:'exteriors',url:'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=600&q=70'},
+  {cat:'dining',url:'https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=600&q=70'},
+  {cat:'spa',url:'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&q=70'},
+  {cat:'rooms',url:'https://images.unsplash.com/photo-1602002418816-5c0aeef426aa?w=600&q=70',wide:true},
+];
+let lbIdx=0,lbData=[];
+function renderGallery(filter){
+  lbData=filter==='all'?GALLERY:GALLERY.filter(g=>g.cat===filter);
+  const grid=document.getElementById('GGRID');if(!grid)return;
+  grid.innerHTML=lbData.map((g,i)=>`<div class="gallery-item${g.wide?' wide':''}${g.tall?' tall':''}" onclick="openLB(${i})"><img src="${g.url}" alt="Gallery" loading="lazy"><div class="gallery-item-overlay"><span>⊕</span></div></div>`).join('');
+}
+function filterG(f,btn){document.querySelectorAll('.gallery-filters .filt').forEach(b=>b.classList.remove('on'));btn.classList.add('on');renderGallery(f)}
+function openLB(i){lbIdx=i;document.getElementById('LB-IMG').src=lbData[i].url;document.getElementById('LB').classList.add('open')}
+function closeLB(){document.getElementById('LB').classList.remove('open')}
+function lbPrev(){lbIdx=(lbIdx-1+lbData.length)%lbData.length;document.getElementById('LB-IMG').src=lbData[lbIdx].url}
+function lbNext(){lbIdx=(lbIdx+1)%lbData.length;document.getElementById('LB-IMG').src=lbData[lbIdx].url}
+ 
+// ── FAQ ────────────────────────────────────────────────
+const FAQS=[
+  {q:'What are your check-in and check-out times?',a:'Standard check-in from 3:00 PM, check-out by 12:00 PM. Early check-in and late checkout can be arranged through your concierge, subject to availability.'},
+  {q:'Do you offer airport transfers?',a:'Yes — private chauffeured transfers and helicopter services from all major regional airports. Contact your concierge at least 24 hours before arrival.'},
+  {q:'Is breakfast included in the room rate?',a:'Breakfast is not included in standard rates, allowing full à la carte choice. Packages including breakfast are available on request.'},
+  {q:'What is your cancellation policy?',a:'Free cancellation up to 48 hours before arrival for most rooms. Penthouse and Villa bookings require 7 days notice. Full details provided at reservation.'},
+  {q:'Are pets welcome?',a:'Well-behaved dogs are welcome in selected rooms and suites. A pet fee applies and advance notice is required. Please contact reservations.'},
+  {q:'Do you accommodate dietary requirements?',a:'Absolutely. Our team accommodates all requirements including gluten-free, vegan, kosher, halal, and severe allergies. Please inform us at reservation.'},
+  {q:'Is there a dress code?',a:'Smart casual to formal attire in La Terrasse and The Cellar. The Amber Bar and Morning Room welcome smart casual. We kindly ask no beach or sportswear.'},
+  {q:'Can I arrange private events or celebrations?',a:'Yes — our dedicated events team specialises in bespoke celebrations. From intimate anniversaries to large galas, every detail handled with precision.'},
+];
+function renderFAQ(){
+  const g=document.getElementById('FGRID');if(!g)return;
+  g.innerHTML=FAQS.map((f,i)=>`<div class="faq-item" id="FQ${i}"><div class="faq-q" onclick="toggleFQ(${i})"><span class="faq-q-text">${f.q}</span><span class="faq-ico">+</span></div><div class="faq-a" id="FA${i}"><p class="faq-a-text">${f.a}</p></div></div>`).join('');
+}
+function toggleFQ(i){
+  const item=document.getElementById('FQ'+i),ans=document.getElementById('FA'+i),open=item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(x=>{x.classList.remove('open');x.querySelector('.faq-a')?.classList.remove('open')});
+  if(!open){item.classList.add('open');ans.classList.add('open')}
+}
+ 
+// ── EVENTS ─────────────────────────────────────────────
+function submitEvent(){
+  const name=document.getElementById('ev-name').value,email=document.getElementById('ev-email').value;
+  if(!name||!email){showToast('⚠ Please fill in name and email');return}
+  showToast(`✦ Event proposal sent! We'll contact ${email} within 24 hours.`);
+  ['ev-name','ev-email','ev-msg'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+}
+ 
+// ── CONTACT ────────────────────────────────────────────
+function sendContact(){
+  const fn=document.getElementById('cf-fn').value,em=document.getElementById('cf-em').value,msg=document.getElementById('cf-msg').value;
+  if(!fn||!em||!msg){showToast('⚠ Please complete all required fields');return}
+  showToast(`✦ Message sent! We'll reply to ${em} within 2 hours.`);
+  ['cf-fn','cf-ln','cf-em','cf-ph','cf-msg'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+}
+ 
+// ── AI CHATBOT ─────────────────────────────────────────
+let chatOpen=false;
+const CHAT_MSGS=document.getElementById('CMSGS');
+const CHAT_SUGS=document.getElementById('CSUGS');
+const CHAT_NOTIF=document.getElementById('CNOTIF');
+ 
+const SUGGESTIONS=[
+  'What rooms are available?',
+  'Tell me about dining options',
+  'How can I book a spa treatment?',
+  'What are the check-in times?',
+  'Do you offer helicopter transfers?',
+  'What is your loyalty programme?',
+];
+ 
+const SYSTEM_PROMPT=`You are Aria, the AI concierge for Aurum Grand, an ultra-luxury 5-star hotel collection. You are elegant, warm, knowledgeable and speak with the refined tone of a world-class concierge. 
+ 
+Key information about Aurum Grand:
+- 5-star luxury hotel collection, Est. 1997 in Monaco
+- 148+ rooms and suites across 44+ properties in Monaco, Dubai, Santorini, Bali, Maldives
+- 5 Michelin stars total (La Terrasse has 3 stars, The Morning Room has 2 stars)
+- Amenities: Rooftop infinity pool, AurumSpa, 24h butler, helicopter transfers, tennis, gym
+- Rooms: Classic Elegance ($220/night), Skyline Deluxe ($320/night), Garden View Suite ($480/night), Ocean Horizon Suite ($680/night), Royal Penthouse ($1,200/night), Infinity Pool Villa ($2,800/night)
+- Check-in: 3PM, check-out: 12PM. Early/late subject to availability
+- Free cancellation up to 48h before arrival
+- Loyalty programme: Aurum (Free), Silver ($180/yr), Gold ($480/yr), Diamond (Invitation only)
+- Contact: hello@aurumgrand.com | +1 800 AURUM GRAND
+- Currently offering 28% off Penthouse Suites for summer 2025
+ 
+Always help guests with reservations, information, recommendations. If they want to book, encourage them to click "Reserve" in the navigation or visit the Rooms page. Keep responses concise but warm and luxurious in tone. Never use bullet points - use flowing, elegant prose. Limit responses to 3-4 sentences unless a detailed answer is clearly needed.`;
+ 
+let chatHistory=[];
+ 
+function toggleChat(){
+  chatOpen=!chatOpen;
+  document.getElementById('CPANEL').classList.toggle('open',chatOpen);
+  document.getElementById('CBUBBLE').classList.toggle('open',chatOpen);
+  CHAT_NOTIF.classList.add('hidden');
+  if(chatOpen&&CHAT_MSGS.children.length===0){
+    setTimeout(()=>{
+      addBotMsg("Welcome to Aurum Grand. I'm Aria, your personal AI concierge. How may I assist you today?");
+      showSuggestions();
+    },300);
+  }
+}
+ 
+function addBotMsg(text){
+  const t=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  const div=document.createElement('div');
+  div.className='chat-msg bot';
+  div.innerHTML=`<div class="chat-msg-av">✦</div><div><div class="chat-msg-bubble">${text}</div><div class="chat-msg-time">${t}</div></div>`;
+  CHAT_MSGS.appendChild(div);
+  CHAT_MSGS.scrollTop=CHAT_MSGS.scrollHeight;
+}
+ 
+function addUserMsg(text){
+  const t=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  const div=document.createElement('div');
+  div.className='chat-msg user';
+  div.innerHTML=`<div class="chat-msg-av">U</div><div><div class="chat-msg-bubble">${text}</div><div class="chat-msg-time">${t}</div></div>`;
+  CHAT_MSGS.appendChild(div);
+  CHAT_MSGS.scrollTop=CHAT_MSGS.scrollHeight;
+}
+ 
+function showTyping(){
+  const div=document.createElement('div');
+  div.className='chat-msg bot';
+  div.id='chat-typing-row';
+  div.innerHTML=`<div class="chat-msg-av">✦</div><div class="chat-typing"><span></span><span></span><span></span></div>`;
+  CHAT_MSGS.appendChild(div);
+  CHAT_MSGS.scrollTop=CHAT_MSGS.scrollHeight;
+  return div;
+}
+ 
+function removeTyping(){const el=document.getElementById('chat-typing-row');if(el)el.remove()}
+ 
+function showSuggestions(){
+  const random=SUGGESTIONS.sort(()=>Math.random()-.5).slice(0,3);
+  CHAT_SUGS.innerHTML=random.map(s=>`<button class="chat-sug" onclick="useSuggestion('${s}')">${s}</button>`).join('');
+}
+ 
+function useSuggestion(text){
+  CHAT_SUGS.innerHTML='';
+  document.getElementById('CINPUT').value=text;
+  sendChatMsg();
+}
+ 
+async function sendChatMsg(){
+  const input=document.getElementById('CINPUT');
+  const text=input.value.trim();
+  if(!text)return;
+  input.value='';
+  input.style.height='44px';
+  CHAT_SUGS.innerHTML='';
+ 
+  addUserMsg(text);
+  chatHistory.push({role:'user',content:text});
+ 
+  const typing=showTyping();
+ 
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:SYSTEM_PROMPT,
+        messages:chatHistory
+      })
+    });
+    const data=await res.json();
+    removeTyping();
+    const reply=data.content?.[0]?.text||'I apologise, I am momentarily unavailable. Please call +1 800 AURUM GRAND for immediate assistance.';
+    chatHistory.push({role:'assistant',content:reply});
+    addBotMsg(reply);
+    setTimeout(showSuggestions,600);
+  }catch(err){
+    removeTyping();
+    addBotMsg('I apologise for the interruption. For immediate assistance, please call +1 800 AURUM GRAND or email hello@aurumgrand.com.');
+    setTimeout(showSuggestions,600);
+  }
+}
+ 
+function clearChat(){
+  CHAT_MSGS.innerHTML='';
+  CHAT_SUGS.innerHTML='';
+  chatHistory=[];
+  setTimeout(()=>{
+    addBotMsg("Chat cleared. How may I assist you today?");
+    showSuggestions();
+  },200);
+}
+ 
+function chatKeydown(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChatMsg()}}
+function autoResize(el){el.style.height='44px';el.style.height=Math.min(el.scrollHeight,120)+'px'}
+ 
+// Show notification after 3s
+setTimeout(()=>{if(!chatOpen)CHAT_NOTIF.classList.remove('hidden')},3000);
+ 
+// ── KEYBOARD ───────────────────────────────────────────
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    closeRDOBtn();
+    closeLB();
+    document.getElementById('CONF').classList.remove('open');
+    if(chatOpen)toggleChat();
+    document.body.style.overflow='';
+  }
+});
+ 
+// ── INIT ───────────────────────────────────────────────
+renderRooms();renderAmen('all');renderGallery('all');renderFAQ();
+bkGoStep(1);
+</script>
+</body>
+</html>
